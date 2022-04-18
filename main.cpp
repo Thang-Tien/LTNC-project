@@ -14,186 +14,12 @@ void close();
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 TTF_Font* font = NULL;
-LTexture personTexture;
 LTexture boxTexture;
 SDL_Rect movingPerson[4][2];
 SDL_Rect standingPerson[4];
 Mix_Chunk* boxSlidingSound;
 Mix_Chunk* themeMusic;
-
-class Person
-{
-public:
-    const int Person_Width = 32;
-    const int Person_Height = 32;
-    const int Person_Vel = 10;
-
-    Person();
-    void handleEvent(int& direction, int& i, SDL_Event& e);
-    void move(SDL_Rect& personRect, SDL_Rect& boxRect);
-    void render(SDL_Rect& currentClip);
-    bool checkCollision(SDL_Rect a, SDL_Rect b);
-    int getPosX ();
-    int getPosY ();
-    int getWidth();
-    int getHeight ();
-private:
-    int posX, posY;
-    int velX, velY;
-};
-
-
-Person::Person()
-{
-    posX = 0;
-    posY = 0;
-
-    velX = 0;
-    velY = 0;
-
-}
-
-void Person::handleEvent (int& direction, int& left, SDL_Event& e)
-{
-    if (e.type == SDL_KEYDOWN && e.key.repeat == 0 )
-    {
-        switch (e.key.keysym.sym)
-        {
-        case SDLK_UP:
-        {
-            velY -= 1;
-            direction = 3;
-            break;
-
-        }
-        case SDLK_DOWN:
-        {
-            velY += 1;
-            direction = 0;
-            break;
-
-        }
-        case SDLK_LEFT:
-        {
-            velX -= 1;
-            direction = 1;
-            break;
-
-        }
-        case SDLK_RIGHT:
-        {
-
-            velX += 1;
-            direction = 2;
-            break;
-        }
-        }
-    }
-    else if (e.type == SDL_KEYUP && e.key.repeat == 0)
-    {
-        switch (e.key.keysym.sym)
-        {
-        case SDLK_UP:
-        {
-            velY += 1;
-            direction = 3;
-            break;
-
-        }
-        case SDLK_DOWN:
-        {
-            velY -= 1;
-            direction = 0;
-            break;
-
-        }
-        case SDLK_LEFT:
-        {
-            velX += 1;
-            direction = 1;
-            break;
-
-        }
-        case SDLK_RIGHT:
-        {
-
-            velX -= 1;
-            direction = 2;
-            break;
-        }
-        }
-    }
-}
-
-void Person::move(SDL_Rect& personRect, SDL_Rect& boxRect)
-{
-    posX += velX;
-    personRect = {posX, posY, personRect.w, personRect.h};
-    boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-    if (velX > 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
-        {
-            cout << "Collision detected !!!" << '\n';
-            boxRect.x = posX + personRect.w;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-        }
-    }
-    if (velX < 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
-        {
-            cout << "Collision detected !!!" << '\n';
-            boxRect.x = posX - boxRect.w;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-        }
-    }
-    posY += velY;
-    personRect = {posX, posY, personRect.w, personRect.h};
-    if (velY > 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
-        {
-            cout << "Collision detected !!!" << '\n';
-            boxRect.y = posY + 32;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-        }
-    }
-    if (velY < 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
-        {
-            cout << "Collision detected !!!" << '\n';
-            boxRect.y = posY - boxRect.h;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-        }
-    }
-}
-
-void Person::render (SDL_Rect& currentClip)
-{
-    personTexture.render (renderer, posX, posY, &currentClip);
-}
-
-int Person::getPosX ()
-{
-    return posX;
-}
-
-int Person::getPosY ()
-{
-    return posY;
-}
-
-int Person::getWidth ()
-{
-    return Person_Width;
-}
-
-int Person::getHeight ()
-{
-    return Person_Height;
-}
+Person person;
 
 // khoi tao
 bool init()
@@ -254,7 +80,7 @@ bool init()
 bool loadMedia()
 {
     bool success = true;
-    if (!personTexture.loadFromFile (renderer, "player.png"))
+    if (!person.loadFromFile (renderer, "player.png"))
     {
         cout << "Failed to load person texture, Error: " << SDL_GetError() << '\n';
         success = false;
@@ -304,7 +130,7 @@ bool loadMedia()
 
 void close()
 {
-    personTexture.free();
+    person.free();
 
     Mix_FreeChunk (themeMusic);
     themeMusic = NULL;
@@ -381,10 +207,9 @@ int main(int argc, char* args[])
         {
             bool quit = false;
             SDL_Event e;
-            Person Person;
             int left = 0, xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2,
-                direction = 0, xPerson = Person.getPosX(), yPerson = Person.getPosY(),
-                 Person_Width = Person.getWidth(), Person_Height = Person.getHeight();
+                direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY(),
+                 person_Width = person.getWidth(), person_Height = person.getHeight();
             SDL_Rect currentClip, standingClip;
             SDL_Rect personRect, boxRect;
             personRect = {xPerson, yPerson, 32, 32};
@@ -392,8 +217,6 @@ int main(int argc, char* args[])
             Mix_PlayChannel (-1, themeMusic, -1);
             while (!quit)
             {
-                xPerson = Person.getPosX();
-                yPerson = Person.getPosY();
                 personRect = {xPerson, yPerson, 32, 32};
                 boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
                 while (SDL_PollEvent (&e) != 0)
@@ -404,7 +227,7 @@ int main(int argc, char* args[])
                     }
                     else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP )
                     {
-                        Person.handleEvent ( direction, left, e);
+                        person.handleEvent ( direction, left, e);
                         if (left == 0)
                         {
                             left = 1;
@@ -419,10 +242,10 @@ int main(int argc, char* args[])
                 }
 
                 SDL_RenderClear (renderer);
-                Person.move(personRect, boxRect);
+                person.move (personRect, boxRect);
                 xBox = boxRect.x;
                 yBox = boxRect.y;
-                Person.render(currentClip);
+                person.renderPerson(renderer, currentClip);
                 boxTexture.render(renderer, xBox, yBox);
                 SDL_RenderPresent(renderer);
             }

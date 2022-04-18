@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1650211372 source:d:\code\sokoban\main.cpp
+1650274375 source:d:\code\sokoban\main.cpp
 	"Params.h"
 	"LTexture.h"
 	"Person.h"
 	"Params.h"
 
-1650166678 d:\code\sokoban\ltexture.h
+1650271389 d:\code\sokoban\ltexture.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -14,7 +14,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650166678 source:d:\code\sokoban\ltexture.cpp
+1650274342 source:d:\code\sokoban\ltexture.cpp
 	"LTexture.h"
 
 1650200657 d:\code\sokoban\params.h
@@ -26,7 +26,23 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650200717 d:\code\sokoban\person.h
+1650270971 d:\code\sokoban\person.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"LTexture.h"
+
+1650274646 source:d:\code\sokoban\person.cpp
+	"Person.h"
+
+1650274342 source:d:\code\advpro-btl\ltexture.cpp
+	"LTexture.h"
+
+1650271389 d:\code\advpro-btl\ltexture.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -35,8 +51,31 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650200717 source:d:\code\sokoban\person.cpp
-	"Person.h"
+1650274375 source:d:\code\advpro-btl\main.cpp
 	"Params.h"
 	"LTexture.h"
+	"Person.h"
+	"Params.h"
+
+1650200657 d:\code\advpro-btl\params.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1650270971 d:\code\advpro-btl\person.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"LTexture.h"
+
+1650274646 source:d:\code\advpro-btl\person.cpp
+	"Person.h"
 

@@ -4,6 +4,8 @@ using std::cout;
 LTexture::LTexture()
 {
     texture = NULL;
+    posX = 0;
+    posY = 0;
     mWidth = 0;
     mHeight = 0;
 }
@@ -115,5 +117,23 @@ int LTexture::getHeight()
 {
     return mHeight;
 }
+int LTexture::getPosX ()
+{
+    return posX;
+}
+
+int LTexture::getPosY ()
+{
+    return posY;
+}
+void LTexture::setPosX (int x)
+{
+    posX = x;
+}
+void LTexture::setPosY (int y)
+{
+    posY = y;
+}
+
 
 
