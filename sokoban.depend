@@ -1,0 +1,42 @@
+# depslib dependency file v1.0
+1650211372 source:d:\code\sokoban\main.cpp
+	"Params.h"
+	"LTexture.h"
+	"Person.h"
+	"Params.h"
+
+1650166678 d:\code\sokoban\ltexture.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1650166678 source:d:\code\sokoban\ltexture.cpp
+	"LTexture.h"
+
+1650200657 d:\code\sokoban\params.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1650200717 d:\code\sokoban\person.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1650200717 source:d:\code\sokoban\person.cpp
+	"Person.h"
+	"Params.h"
+	"LTexture.h"
+
