@@ -2,10 +2,11 @@
 #include "LTexture.h"
 #include "Person.h"
 #include "Params.h"
+#include "Map.h"
 using std::cout;
 
-const int SCREEN_WIDTH = 900;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1200;
+const int SCREEN_HEIGHT = 700;
 bool init ();
 bool loadMedia();
 void close();
@@ -20,6 +21,7 @@ SDL_Rect standingPerson[4];
 Mix_Chunk* boxSlidingSound;
 Mix_Chunk* themeMusic;
 Person person;
+Map gameMap;
 
 // khoi tao
 bool init()
@@ -120,7 +122,7 @@ bool loadMedia()
             {
                 cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
             }
-
+            gameMap.loadMapData (renderer, "levels/1.txt");
         }
 
     }
@@ -208,9 +210,9 @@ int main(int argc, char* args[])
             bool quit = false;
             SDL_Event e;
             int left = 0, xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2,
-                direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY(),
-                 person_Width = person.getWidth(), person_Height = person.getHeight();
-            SDL_Rect currentClip, standingClip;
+                direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
+
+            SDL_Rect currentClip;
             SDL_Rect personRect, boxRect;
             personRect = {xPerson, yPerson, 32, 32};
             boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
@@ -243,6 +245,7 @@ int main(int argc, char* args[])
 
                 SDL_RenderClear (renderer);
                 person.move (personRect, boxRect);
+                gameMap.renderMap (renderer);
                 xBox = boxRect.x;
                 yBox = boxRect.y;
                 person.renderPerson(renderer, currentClip);
