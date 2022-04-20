@@ -209,6 +209,8 @@ int main(int argc, char* args[])
         {
             bool quit = false;
             SDL_Event e;
+            person.setPosX (gameMap.XpersonPosition);
+            person.setPosY (gameMap.YpersonPosition);
             int left = 0, xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2,
                 direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
 
