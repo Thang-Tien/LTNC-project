@@ -39,10 +39,10 @@
 1650274646 source:d:\code\sokoban\person.cpp
 	"Person.h"
 
-1650424162 source:d:\code\advpro-btl\ltexture.cpp
+1650540838 source:d:\code\advpro-btl\ltexture.cpp
 	"LTexture.h"
 
-1650271389 d:\code\advpro-btl\ltexture.h
+1650540694 d:\code\advpro-btl\ltexture.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -51,7 +51,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650424664 source:d:\code\advpro-btl\main.cpp
+1650540616 source:d:\code\advpro-btl\main.cpp
 	"Params.h"
 	"LTexture.h"
 	"Person.h"
@@ -67,7 +67,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650424255 d:\code\advpro-btl\person.h
+1650540724 d:\code\advpro-btl\person.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -77,13 +77,13 @@
 	<SDL_mixer.h>
 	"LTexture.h"
 
-1650274646 source:d:\code\advpro-btl\person.cpp
+1650540705 source:d:\code\advpro-btl\person.cpp
 	"Person.h"
 
 1650424054 source:d:\code\advpro-btl\map.cpp
 	"Map.h"
 
-1650385309 d:\code\advpro-btl\map.h
+1650540205 d:\code\advpro-btl\map.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>

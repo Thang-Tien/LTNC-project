@@ -122,7 +122,7 @@ bool loadMedia()
             {
                 cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
             }
-            gameMap.loadMapData (renderer, "levels/1.txt");
+            gameMap.loadMapData (renderer, "levels/3.txt");
         }
 
     }
@@ -148,50 +148,6 @@ void close()
     exit(1);
 }
 
-bool Person::checkCollision(SDL_Rect a, SDL_Rect b)
-{
-    //The sides of the rectangles
-    int leftA, leftB;
-    int rightA, rightB;
-    int topA, topB;
-    int bottomA, bottomB;
-
-    //Calculate the sides of rect A
-    leftA = a.x;
-    rightA = a.x + a.w;
-    topA = a.y;
-    bottomA = a.y + a.h;
-
-    //Calculate the sides of rect B
-    leftB = b.x;
-    rightB = b.x + b.w;
-    topB = b.y;
-    bottomB = b.y + b.h;
-
-    //If any of the sides from A are outside of B
-    if( bottomA <= topB )
-    {
-        return false;
-    }
-
-    if( topA >= bottomB )
-    {
-        return false;
-    }
-
-    if( rightA <= leftB )
-    {
-        return false;
-    }
-
-    if( leftA >= rightB )
-    {
-        return false;
-    }
-
-    //If none of the sides from A are outside B
-    return true;
-}
 //void handleEvent ()
 int main(int argc, char* args[])
 {
@@ -211,18 +167,17 @@ int main(int argc, char* args[])
             SDL_Event e;
             person.setPosX (gameMap.XpersonPosition);
             person.setPosY (gameMap.YpersonPosition);
-            int left = 0, xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2,
-                direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
 
-            SDL_Rect currentClip;
-            SDL_Rect personRect, boxRect;
+            // left foot or right foot
+            int left = 0,
+            xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
+
+            SDL_Rect personRect, boxRect, currentClip;
             personRect = {xPerson, yPerson, 32, 32};
             boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
             Mix_PlayChannel (-1, themeMusic, -1);
             while (!quit)
             {
-                personRect = {xPerson, yPerson, 32, 32};
-                boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
                 while (SDL_PollEvent (&e) != 0)
                 {
                     if (e.type == SDL_QUIT)
@@ -246,6 +201,8 @@ int main(int argc, char* args[])
                 }
 
                 SDL_RenderClear (renderer);
+                personRect = {xPerson, yPerson, 32, 32};
+                boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
                 person.move (personRect, boxRect);
                 gameMap.renderMap (renderer);
                 xBox = boxRect.x;

@@ -123,3 +123,4 @@ void Person::renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip)
 
 
 
+

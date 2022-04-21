@@ -17,7 +17,7 @@ public:
     void handleEvent(int& direction, int& i, SDL_Event& e);
     void move(SDL_Rect& personRect, SDL_Rect& boxRect);
     void renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip);
-    bool checkCollision(SDL_Rect a, SDL_Rect b);
+
 
 private:
     int velX, velY;

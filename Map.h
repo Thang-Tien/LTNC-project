@@ -24,7 +24,6 @@ public:
     int wallCount = 0;
     int XwallPosition [100];
     int YwallPosition [100];
-
     Map();
 
 };
