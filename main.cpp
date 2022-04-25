@@ -101,16 +101,16 @@ bool loadMedia()
                 int x = 0;
                 for (int j=0; j<2; j++)
                 {
-                    movingPerson[i][j] = {x, y, 32, 32};
-                    x += 64;
+                    movingPerson[i][j] = {x, y, 50, 50};
+                    x += 100;
                 }
-                y += 32;
+                y += 50;
             }
             y = 0;
             for (int i=0; i<4; i++)
             {
-                standingPerson[i] = {32, y, 32, 32};
-                y += 32;
+                standingPerson[i] = {50, y, 50, 50};
+                y += 50;
             }
             themeMusic = Mix_LoadWAV ("theme-song.wav");
             if (themeMusic == NULL)
@@ -163,52 +163,64 @@ int main(int argc, char* args[])
         }
         else
         {
-            bool quit = false;
+            bool quit = false, isMoving = false;
             SDL_Event e;
             person.setPosX (gameMap.XpersonPosition);
             person.setPosY (gameMap.YpersonPosition);
 
             // left foot or right foot
             int left = 0,
-            xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
+                xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
 
             SDL_Rect personRect, boxRect, currentClip;
-            personRect = {xPerson, yPerson, 32, 32};
+            personRect = {xPerson, yPerson, 50, 50};
             boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
             Mix_PlayChannel (-1, themeMusic, -1);
             while (!quit)
             {
+                gameMap.renderMap (renderer);
+                person.distance = 0;
                 while (SDL_PollEvent (&e) != 0)
                 {
                     if (e.type == SDL_QUIT)
                     {
                         quit = true;
                     }
-                    else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP )
+                    else if (e.type == SDL_KEYDOWN )
                     {
+                        isMoving = true;
+                        person.setVelX (0);
+                        person.setVelY (0);
                         person.handleEvent ( direction, left, e);
-                        if (left == 0)
+                        while (person.distance < 50)
                         {
-                            left = 1;
-                        }
-                        else left = 0;
-                        currentClip = movingPerson[direction][left];
-                        if (e.type == SDL_KEYUP)
-                        {
-                            currentClip = standingPerson [direction];
+
+                            if (person.distance % 10 == 0)
+                            {
+                                if (left == 1) left = 0;
+                                else left = 1;
+                            }
+                            currentClip = movingPerson[direction][left];
+                            personRect = {xPerson, yPerson, 50, 50};
+                            boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
+                            person.move (personRect, boxRect);
+                            SDL_RenderClear(renderer);
+                            gameMap.renderMap (renderer);
+                            xBox = boxRect.x;
+                            yBox = boxRect.y;
+                            boxTexture.render(renderer, xBox, yBox);
+                            person.renderPerson(renderer, currentClip);
+                            SDL_RenderPresent (renderer);
+                            person.distance++;
+                            SDL_Delay (5);
                         }
                     }
                 }
-
-                SDL_RenderClear (renderer);
-                personRect = {xPerson, yPerson, 32, 32};
-                boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
-                person.move (personRect, boxRect);
-                gameMap.renderMap (renderer);
-                xBox = boxRect.x;
-                yBox = boxRect.y;
-                person.renderPerson(renderer, currentClip);
+                cout << personRect.x << " " << personRect.y << '\n';
+                cout << xBox << " " << yBox << '\n';
+                currentClip = standingPerson [direction];
                 boxTexture.render(renderer, xBox, yBox);
+                person.renderPerson(renderer, currentClip);
                 SDL_RenderPresent(renderer);
             }
         }

@@ -5,6 +5,7 @@ Person::Person()
 
     velX = 0;
     velY = 0;
+    distance = 0;
 }
 
 void Person::handleEvent (int& direction, int& left, SDL_Event& e)
@@ -43,7 +44,7 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
         }
         }
     }
-    else if (e.type == SDL_KEYUP && e.key.repeat == 0)
+    /*else if (e.type == SDL_KEYUP && e.key.repeat == 0)
     {
         switch (e.key.keysym.sym)
         {
@@ -72,11 +73,12 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
             break;
         }
         }
-    }
+    }*/
 }
 
 void Person::move(SDL_Rect& personRect, SDL_Rect& boxRect)
 {
+
     posX += velX;
     personRect = {posX, posY, personRect.w, personRect.h};
     boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
@@ -102,7 +104,7 @@ void Person::move(SDL_Rect& personRect, SDL_Rect& boxRect)
     {
         if (checkCollision(personRect, boxRect) == true)
         {
-            boxRect.y = posY + 32;
+            boxRect.y = posY + personRect.h;
             boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
         }
     }
@@ -119,6 +121,16 @@ void Person::move(SDL_Rect& personRect, SDL_Rect& boxRect)
 void Person::renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip)
 {
     render (renderer, posX, posY, &currentClip);
+}
+
+void Person::setVelX (int x)
+{
+    velX = x;
+}
+
+void Person::setVelY (int y)
+{
+    velY = y;
 }
 
 
