@@ -12,6 +12,7 @@
 class Map:public LTexture
 {
 public:
+    Map();
     LTexture mapTexture[24][14];
     string mapDataPreLoad[14];
     char mapData[24][14];
@@ -20,11 +21,13 @@ public:
     void renderMap (SDL_Renderer* renderer);
     int XpersonPosition;
     int YpersonPosition;
+
     int boxCount = 0;
     int wallCount = 0;
     int XwallPosition [100];
     int YwallPosition [100];
-    Map();
+    int XboxPosition [100];
+    int YboxPosition [100];
 
 };
 

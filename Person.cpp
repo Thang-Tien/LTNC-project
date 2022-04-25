@@ -44,78 +44,52 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
         }
         }
     }
-    /*else if (e.type == SDL_KEYUP && e.key.repeat == 0)
-    {
-        switch (e.key.keysym.sym)
-        {
-        case SDLK_UP:
-        {
-            velY += 1;
-            break;
 
-        }
-        case SDLK_DOWN:
-        {
-            velY -= 1;
-            break;
-
-        }
-        case SDLK_LEFT:
-        {
-            velX += 1;
-            break;
-
-        }
-        case SDLK_RIGHT:
-        {
-
-            velX -= 1;
-            break;
-        }
-        }
-    }*/
 }
 
-void Person::move(SDL_Rect& personRect, SDL_Rect& boxRect)
+void Person::move(SDL_Rect& personRect, SDL_Rect boxRect[], int boxCount)
 {
-
     posX += velX;
-    personRect = {posX, posY, personRect.w, personRect.h};
-    boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-    if (velX > 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
-        {
-            boxRect.x = posX + personRect.w;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-        }
-    }
-    if (velX < 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
-        {
-            boxRect.x = posX - boxRect.w;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
-        }
-    }
     posY += velY;
+
     personRect = {posX, posY, personRect.w, personRect.h};
-    if (velY > 0)
+    for (int i = 0; i < boxCount; i++)
     {
-        if (checkCollision(personRect, boxRect) == true)
+        if (velX > 0)
         {
-            boxRect.y = posY + personRect.h;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
+            if (checkCollision(personRect, boxRect[i]) == true)
+            {
+                boxRect[i].x = posX + personRect.w;
+                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
+            }
         }
-    }
-    if (velY < 0)
-    {
-        if (checkCollision(personRect, boxRect) == true)
+        if (velX < 0)
         {
-            boxRect.y = posY - boxRect.h;
-            boxRect = {boxRect.x, boxRect.y, boxRect.w, boxRect.h};
+            if (checkCollision(personRect, boxRect[i]) == true)
+            {
+                boxRect[i].x = posX - boxRect[i].w;
+                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
+            }
         }
+        if (velY > 0)
+        {
+            if (checkCollision(personRect, boxRect[i]) == true)
+            {
+                boxRect[i].y = posY + personRect.h;
+                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
+            }
+        }
+        if (velY < 0)
+        {
+            if (checkCollision(personRect, boxRect[i]) == true)
+            {
+                boxRect[i].y = posY - boxRect[i].h;
+                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
+            }
+        }
+        personRect = {posX, posY, personRect.w, personRect.h};
     }
+
 }
 
 void Person::renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip)

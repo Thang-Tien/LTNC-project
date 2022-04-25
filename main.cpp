@@ -1,8 +1,8 @@
 #include "Params.h"
 #include "LTexture.h"
 #include "Person.h"
-#include "Params.h"
 #include "Map.h"
+#include "box.h"
 using std::cout;
 
 const int SCREEN_WIDTH = 1200;
@@ -15,13 +15,13 @@ void close();
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 TTF_Font* font = NULL;
-LTexture boxTexture;
 SDL_Rect movingPerson[4][2];
 SDL_Rect standingPerson[4];
 Mix_Chunk* boxSlidingSound;
 Mix_Chunk* themeMusic;
 Person person;
 Map gameMap;
+box Box;
 
 // khoi tao
 bool init()
@@ -89,12 +89,6 @@ bool loadMedia()
     }
     else
     {
-        if (!boxTexture.loadFromFile(renderer, "box.png"))
-        {
-            cout << "Failed to load box texture, Error: " << SDL_GetError() << '\n';
-        }
-        else
-        {
             int y = 0;
             for (int i=0; i<4; i++)
             {
@@ -122,9 +116,9 @@ bool loadMedia()
             {
                 cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
             }
-            gameMap.loadMapData (renderer, "levels/3.txt");
-        }
-
+            gameMap.loadMapData (renderer, "levels/test.txt");
+            Box.loadBoxData (gameMap);
+            Box.loadBoxTexture (renderer);
     }
 
     return success;
@@ -168,17 +162,17 @@ int main(int argc, char* args[])
             person.setPosX (gameMap.XpersonPosition);
             person.setPosY (gameMap.YpersonPosition);
 
-            // left foot or right foot
-            int left = 0,
-                xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
+            // left feet or right feet
+            //          v
+            int      left = 0, xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
 
             SDL_Rect personRect, boxRect, currentClip;
             personRect = {xPerson, yPerson, 50, 50};
-            boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
             Mix_PlayChannel (-1, themeMusic, -1);
             while (!quit)
             {
                 gameMap.renderMap (renderer);
+                Box.renderBox (renderer);
                 person.distance = 0;
                 while (SDL_PollEvent (&e) != 0)
                 {
@@ -186,7 +180,7 @@ int main(int argc, char* args[])
                     {
                         quit = true;
                     }
-                    else if (e.type == SDL_KEYDOWN )
+                    else if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
                     {
                         isMoving = true;
                         person.setVelX (0);
@@ -194,7 +188,7 @@ int main(int argc, char* args[])
                         person.handleEvent ( direction, left, e);
                         while (person.distance < 50)
                         {
-
+                            // switch feet
                             if (person.distance % 10 == 0)
                             {
                                 if (left == 1) left = 0;
@@ -202,13 +196,10 @@ int main(int argc, char* args[])
                             }
                             currentClip = movingPerson[direction][left];
                             personRect = {xPerson, yPerson, 50, 50};
-                            boxRect = {xBox, yBox, boxTexture.getWidth(), boxTexture.getHeight()};
-                            person.move (personRect, boxRect);
+                            person.move (personRect, Box.boxRect, Box.boxCount);
                             SDL_RenderClear(renderer);
                             gameMap.renderMap (renderer);
-                            xBox = boxRect.x;
-                            yBox = boxRect.y;
-                            boxTexture.render(renderer, xBox, yBox);
+                            Box.renderBox (renderer);
                             person.renderPerson(renderer, currentClip);
                             SDL_RenderPresent (renderer);
                             person.distance++;
@@ -216,10 +207,8 @@ int main(int argc, char* args[])
                         }
                     }
                 }
-                cout << personRect.x << " " << personRect.y << '\n';
-                cout << xBox << " " << yBox << '\n';
+                //cout << personRect.x << " " << personRect.y << '\n';
                 currentClip = standingPerson [direction];
-                boxTexture.render(renderer, xBox, yBox);
                 person.renderPerson(renderer, currentClip);
                 SDL_RenderPresent(renderer);
             }
