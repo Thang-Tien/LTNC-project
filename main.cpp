@@ -3,13 +3,11 @@
 #include "Person.h"
 #include "Map.h"
 #include "box.h"
+#include "wall.h"
 using std::cout;
 
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 700;
-bool init ();
-bool loadMedia();
-void close();
 
 // khai bao
 SDL_Window* window = NULL;
@@ -22,6 +20,7 @@ Mix_Chunk* themeMusic;
 Person person;
 Map gameMap;
 box Box;
+wall Wall;
 
 // khoi tao
 bool init()
@@ -106,7 +105,7 @@ bool loadMedia()
                 standingPerson[i] = {50, y, 50, 50};
                 y += 50;
             }
-            themeMusic = Mix_LoadWAV ("theme-song.wav");
+            themeMusic = Mix_LoadWAV ("theme-music.mp3");
             if (themeMusic == NULL)
             {
                 cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
@@ -116,9 +115,11 @@ bool loadMedia()
             {
                 cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
             }
-            gameMap.loadMapData (renderer, "levels/test.txt");
+            gameMap.loadMapData (renderer, "levels/1.txt");
             Box.loadBoxData (gameMap);
             Box.loadBoxTexture (renderer);
+            Wall.loadWallData (gameMap);
+            Wall.loadWallTexture (renderer);
     }
 
     return success;
@@ -161,6 +162,8 @@ int main(int argc, char* args[])
             SDL_Event e;
             person.setPosX (gameMap.XpersonPosition);
             person.setPosY (gameMap.YpersonPosition);
+            SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+            SDL_RenderClear (renderer);
 
             // left feet or right feet
             //          v
@@ -172,15 +175,21 @@ int main(int argc, char* args[])
             Mix_PlayChannel (-1, themeMusic, -1);
             while (!quit)
             {
+                if (Box.winCheck() == true)
+                {
+                    cout << "you win" ; quit = true;
+                    SDL_Delay (1000);
+                }
                 gameMap.renderMap (renderer);
                 Box.renderBox (renderer);
+                Wall.renderWall (renderer);
                 while (SDL_PollEvent (&e) != 0)
                 {
                     if (e.type == SDL_QUIT)
                     {
                         quit = true;
                     }
-                    else if (e.type == SDL_KEYDOWN )
+                    else if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
                     {
                         person.setVelX (0);
                         person.setVelY (0);
@@ -196,12 +205,15 @@ int main(int argc, char* args[])
                             }
 
                             currentClip = movingPerson[direction][left];
-                            person.move (personRect, Box.boxRect, Box.boxCount);
+                            person.moveAndCheckCollision (personRect, Box.boxRect, Box.boxCount, Wall.wallRect, Wall.wallCount);
                             SDL_RenderClear(renderer);
+                            //render
                             gameMap.renderMap (renderer);
                             Box.renderBox (renderer);
+                            Wall.renderWall (renderer);
                             person.renderPerson(renderer, currentClip);
                             SDL_RenderPresent (renderer);
+
                             person.distance++;
                             SDL_Delay (5);
                         }

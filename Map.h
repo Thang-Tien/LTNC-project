@@ -19,15 +19,21 @@ public:
     SDL_Rect mapRect[24][14];
     void loadMapData (SDL_Renderer* renderer, string path);
     void renderMap (SDL_Renderer* renderer);
+
     int XpersonPosition;
     int YpersonPosition;
 
-    int boxCount = 0;
     int wallCount = 0;
     int XwallPosition [100];
     int YwallPosition [100];
+
+    int boxCount = 0;
     int XboxPosition [100];
     int YboxPosition [100];
+
+    int goalCount = 0;
+    int XgoalPosition [100];
+    int YgoalPosition [100];
 
 };
 

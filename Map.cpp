@@ -49,7 +49,6 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
             }
             if (mapData[i][j] == '#')
             {
-                mapTexture[i][j].loadFromFile(renderer, "wall.png");
                 XwallPosition [wallCount] = x;
                 YwallPosition [wallCount] = y;
                 wallCount ++;
@@ -68,12 +67,27 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
             if (mapData[i][j] == '.')
             {
                 mapTexture[i][j].loadFromFile(renderer, "Goal.png");
+                XgoalPosition[goalCount] = x;
+                YgoalPosition[goalCount] = y;
+                goalCount ++;
             }
             if (mapData[i][j] == '@')
             {
                 mapTexture[i][j].loadFromFile(renderer, "floor.png");
                 XpersonPosition = x;
                 YpersonPosition = y;
+            }
+            if (mapData[i][j] == '?')
+            {
+                mapTexture[i][j].loadFromFile(renderer, "Goal.png");
+
+                XboxPosition[boxCount] = x;
+                YboxPosition[boxCount] = y;
+                boxCount ++;
+
+                XgoalPosition[goalCount] = x;
+                YgoalPosition[goalCount] = y;
+                goalCount ++;
             }
             x += 50;
 

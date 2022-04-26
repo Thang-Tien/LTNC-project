@@ -41,6 +41,7 @@
 		<Unit filename="box.cpp" />
 		<Unit filename="box.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="wall.cpp" />
 		<Unit filename="wall.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

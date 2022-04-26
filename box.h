@@ -14,10 +14,19 @@ class box:public LTexture
 public:
     box();
     LTexture boxTexture;
+    LTexture boxWinTexture;
+
     int boxCount = 0;
+    SDL_Rect boxRect[100];
     int XboxPosition [100];
     int YboxPosition [100];
-    SDL_Rect boxRect[100];
+
+    int goalCount = 0;
+    int XgoalPosition [100];
+    int YgoalPosition[100];
+    bool scoredGoals [100];
+
+    bool winCheck ();
     void loadBoxTexture (SDL_Renderer* renderer);
     void loadBoxData(const Map& gameMap);
     void renderBox (SDL_Renderer* renderer);

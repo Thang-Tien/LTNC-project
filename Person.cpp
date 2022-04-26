@@ -1,4 +1,5 @@
 #include "Person.h"
+using std::cout;
 Person::Person()
 {
     LTexture();
@@ -47,48 +48,114 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
 
 }
 
-void Person::move(SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount)
+void Person::moveAndCheckCollision (SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount, SDL_Rect wallRect[], int& wallCount)
 {
     posX += velX;
     posY += velY;
 
-    personRect = {posX, posY, personRect.w, personRect.h};
+    // person pushes box
     for (int i = 0; i < boxCount; i++)
     {
-        if (velX > 0)
+        personRect = {posX, posY, personRect.w, personRect.h};
+        if (checkCollision(personRect, boxRect[i]) == true)
         {
-            if (checkCollision(personRect, boxRect[i]) == true)
+            if (velX > 0)
             {
                 boxRect[i].x = posX + personRect.w;
-                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
+
             }
-        }
-        if (velX < 0)
-        {
-            if (checkCollision(personRect, boxRect[i]) == true)
+            if (velX < 0)
             {
                 boxRect[i].x = posX - boxRect[i].w;
-                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
             }
-        }
-        if (velY > 0)
-        {
-            if (checkCollision(personRect, boxRect[i]) == true)
+            if (velY > 0)
             {
+
                 boxRect[i].y = posY + personRect.h;
-                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
             }
-        }
-        if (velY < 0)
-        {
-            if (checkCollision(personRect, boxRect[i]) == true)
+            if (velY < 0)
             {
                 boxRect[i].y = posY - boxRect[i].h;
-                boxRect[i] = {boxRect[i].x, boxRect[i].y, boxRect[i].w, boxRect[i].h};
             }
         }
-        personRect = {posX, posY, personRect.w, personRect.h};
     }
+
+    // box vs box collision check
+    for (int i = 0; i < boxCount; i++)
+    {
+        personRect = {posX, posY, personRect.w, personRect.h};
+        for (int j = i + 1; j < boxCount; j++)
+        {
+                if (checkCollision (boxRect[i], boxRect[j]) == true)
+                {
+                    if (velX > 0)
+                    {
+                        boxRect[i].x = boxRect[j].x - 50;
+                        posX = boxRect[j].x - 100;
+                    }
+                    if (velX < 0)
+                    {
+                        boxRect[j].x = boxRect[i].x + 50;
+                        posX = boxRect[i].x + 100;
+                    }
+                    if (velY > 0)
+                    {
+                        boxRect[i].y = boxRect[j].y - 50;
+                        posY = boxRect[j].y - 100;
+                    }
+                    if (velY < 0)
+                    {
+                        boxRect[j].y = boxRect[i].y + 50;
+                        posY = boxRect[i].y + 100;
+                    }
+                    personRect = {posX, posY, personRect.w, personRect.h};
+                }
+        }
+    }
+
+    // person vs wall collision check
+    for (int i = 0; i < wallCount; i++)
+    {
+        if (checkCollision (personRect, wallRect[i]) == true)
+        {
+            posX -= velX;
+            posY -= velY;
+            personRect = {posX, posY, personRect.w, personRect.h};
+        }
+    }
+    // box vs wall collision check
+    for (int i = 0; i < boxCount; i++)
+    {
+        for (int j = 0; j < wallCount; j++)
+        {
+            if (checkCollision (boxRect[i], wallRect[j]) == true)
+            {
+                if (velX > 0)
+                {
+                    boxRect[i].x = wallRect[j].x - 50;
+                    posX = boxRect[i].x - 50;
+                }
+                if (velX < 0)
+                {
+                    boxRect[i].x = wallRect[j].x + 50;
+                    posX = boxRect[i].x + 50;
+                }
+                if (velY > 0)
+                {
+                    boxRect[i].y = wallRect[j].y - 50;
+                    posY = boxRect[i].y - 50;
+                }
+                if (velY < 0)
+                {
+                    boxRect[i].y = wallRect[j].y + 50;
+                    posY = boxRect[i].y + 50;
+                }
+                personRect = {posX, posY, personRect.w, personRect.h};
+            }
+        }
+    }
+
+
 
 }
 
