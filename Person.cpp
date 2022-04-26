@@ -47,7 +47,7 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
 
 }
 
-void Person::move(SDL_Rect& personRect, SDL_Rect boxRect[], int boxCount)
+void Person::move(SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount)
 {
     posX += velX;
     posY += velY;

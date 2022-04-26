@@ -51,7 +51,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650910288 source:d:\code\advpro-btl\main.cpp
+1650942867 source:d:\code\advpro-btl\main.cpp
 	"Params.h"
 	"LTexture.h"
 	"Person.h"
@@ -67,7 +67,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1650910490 d:\code\advpro-btl\person.h
+1650946863 d:\code\advpro-btl\person.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -77,13 +77,13 @@
 	<SDL_mixer.h>
 	"LTexture.h"
 
-1650910531 source:d:\code\advpro-btl\person.cpp
+1650946870 source:d:\code\advpro-btl\person.cpp
 	"Person.h"
 
-1650905665 source:d:\code\advpro-btl\map.cpp
+1650946916 source:d:\code\advpro-btl\map.cpp
 	"Map.h"
 
-1650907341 d:\code\advpro-btl\map.h
+1650947843 d:\code\advpro-btl\map.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>

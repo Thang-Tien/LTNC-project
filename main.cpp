@@ -157,34 +157,34 @@ int main(int argc, char* args[])
         }
         else
         {
-            bool quit = false, isMoving = false;
+            bool quit = false;
             SDL_Event e;
             person.setPosX (gameMap.XpersonPosition);
             person.setPosY (gameMap.YpersonPosition);
 
             // left feet or right feet
             //          v
-            int      left = 0, xBox = SCREEN_WIDTH/2, yBox = SCREEN_HEIGHT/2, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
+            int      left = 0, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
 
-            SDL_Rect personRect, boxRect, currentClip;
+            SDL_Rect personRect, currentClip;
             personRect = {xPerson, yPerson, 50, 50};
+            // play theme music
             Mix_PlayChannel (-1, themeMusic, -1);
             while (!quit)
             {
                 gameMap.renderMap (renderer);
                 Box.renderBox (renderer);
-                person.distance = 0;
                 while (SDL_PollEvent (&e) != 0)
                 {
                     if (e.type == SDL_QUIT)
                     {
                         quit = true;
                     }
-                    else if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+                    else if (e.type == SDL_KEYDOWN )
                     {
-                        isMoving = true;
                         person.setVelX (0);
                         person.setVelY (0);
+                        person.distance = 0;
                         person.handleEvent ( direction, left, e);
                         while (person.distance < 50)
                         {
@@ -194,8 +194,8 @@ int main(int argc, char* args[])
                                 if (left == 1) left = 0;
                                 else left = 1;
                             }
+
                             currentClip = movingPerson[direction][left];
-                            personRect = {xPerson, yPerson, 50, 50};
                             person.move (personRect, Box.boxRect, Box.boxCount);
                             SDL_RenderClear(renderer);
                             gameMap.renderMap (renderer);
@@ -207,7 +207,6 @@ int main(int argc, char* args[])
                         }
                     }
                 }
-                //cout << personRect.x << " " << personRect.y << '\n';
                 currentClip = standingPerson [direction];
                 person.renderPerson(renderer, currentClip);
                 SDL_RenderPresent(renderer);

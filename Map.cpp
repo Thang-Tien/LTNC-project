@@ -63,7 +63,6 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
                 mapTexture[i][j].loadFromFile(renderer, "floor.png");
                 XboxPosition[boxCount] = x;
                 YboxPosition[boxCount] = y;
-                cout << XboxPosition[boxCount] << " " << YboxPosition[boxCount] << '\n';
                 boxCount ++;
             }
             if (mapData[i][j] == '.')

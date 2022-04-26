@@ -13,7 +13,7 @@ class Person:public LTexture
 public:
     Person();
     void handleEvent(int& direction, int& i, SDL_Event& e);
-    void move(SDL_Rect& personRect, SDL_Rect boxRect[], int boxCount);
+    void move(SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount);
     void renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip);
     int distance;
     void setVelX (int x);
