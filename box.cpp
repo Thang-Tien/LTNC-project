@@ -1,6 +1,10 @@
 #include "box.h"
 using std::cout;
-box::box(){}
+box::box()
+{
+    boxCount = 0;
+    goalCount = 0;
+}
 
 void box::renderBox (SDL_Renderer* renderer)
 {
@@ -8,18 +12,22 @@ void box::renderBox (SDL_Renderer* renderer)
     {
         boxTexture.render (renderer, boxRect[i].x, boxRect[i].y);
     }
-    for (int i = 0; i < boxCount; i++)
+    for (int j = 0; j < goalCount; j++)
     {
-        for (int j = 0; j < goalCount; j++)
+        for (int i = 0; i < boxCount; i++)
         {
             if (XgoalPosition[j] == boxRect[i].x && YgoalPosition[j] == boxRect[i].y)
             {
                 scoredGoals[j] = true;
                 boxWinTexture.render(renderer, XgoalPosition[j], YgoalPosition[j]);
+                break;
+            }
+            else
+            {
+                scoredGoals[j] = false;
             }
         }
     }
-
 }
 void box::loadBoxTexture (SDL_Renderer* renderer)
 {

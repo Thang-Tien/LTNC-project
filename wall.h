@@ -14,10 +14,12 @@ class wall:public LTexture
 {
 public:
     LTexture wallTexture;
+    wall ();
     int wallCount = 0;
     int XwallPosition [100];
     int YwallPosition [100];
     SDL_Rect wallRect [100];
+
     void loadWallData (const Map& gameMap);
     void loadWallTexture (SDL_Renderer* renderer);
     void renderWall (SDL_Renderer* renderer);

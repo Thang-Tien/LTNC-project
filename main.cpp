@@ -4,8 +4,9 @@
 #include "Map.h"
 #include "box.h"
 #include "wall.h"
-using std::cout;
 
+using std::cout;
+using std::to_string;
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 700;
 
@@ -78,7 +79,7 @@ bool init()
     return success;
 }
 
-bool loadMedia()
+bool loadMedia(int level)
 {
     bool success = true;
     if (!person.loadFromFile (renderer, "player.png"))
@@ -88,38 +89,39 @@ bool loadMedia()
     }
     else
     {
-            int y = 0;
-            for (int i=0; i<4; i++)
+        int y = 0;
+        for (int i=0; i<4; i++)
+        {
+            int x = 0;
+            for (int j=0; j<2; j++)
             {
-                int x = 0;
-                for (int j=0; j<2; j++)
-                {
-                    movingPerson[i][j] = {x, y, 50, 50};
-                    x += 100;
-                }
-                y += 50;
+                movingPerson[i][j] = {x, y, 50, 50};
+                x += 100;
             }
-            y = 0;
-            for (int i=0; i<4; i++)
-            {
-                standingPerson[i] = {50, y, 50, 50};
-                y += 50;
-            }
-            themeMusic = Mix_LoadWAV ("theme-music.mp3");
-            if (themeMusic == NULL)
-            {
-                cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
-            }
-            boxSlidingSound = Mix_LoadWAV ("box-sliding-sound-effect.wav");
-            if (boxSlidingSound == NULL)
-            {
-                cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
-            }
-            gameMap.loadMapData (renderer, "levels/1.txt");
-            Box.loadBoxData (gameMap);
-            Box.loadBoxTexture (renderer);
-            Wall.loadWallData (gameMap);
-            Wall.loadWallTexture (renderer);
+            y += 50;
+        }
+        y = 0;
+        for (int i=0; i<4; i++)
+        {
+            standingPerson[i] = {50, y, 50, 50};
+            y += 50;
+        }
+        themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
+        if (themeMusic == NULL)
+        {
+            cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
+        }
+        boxSlidingSound = Mix_LoadWAV ("box-sliding-sound-effect.wav");
+        if (boxSlidingSound == NULL)
+        {
+            cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
+        }
+
+        gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
+        Box.loadBoxData (gameMap);
+        Box.loadBoxTexture (renderer);
+        Wall.loadWallData (gameMap);
+        Wall.loadWallTexture (renderer);
     }
 
     return success;
@@ -152,76 +154,90 @@ int main(int argc, char* args[])
     }
     else
     {
-        if (!loadMedia())
-        {
-            cout << "Failed to load media" << '\n';
-        }
-        else
-        {
-            bool quit = false;
-            SDL_Event e;
-            person.setPosX (gameMap.XpersonPosition);
-            person.setPosY (gameMap.YpersonPosition);
-            SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-            SDL_RenderClear (renderer);
 
-            // left feet or right feet
-            //          v
-            int      left = 0, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
-
-            SDL_Rect personRect, currentClip;
-            personRect = {xPerson, yPerson, 50, 50};
-            // play theme music
-            Mix_PlayChannel (-1, themeMusic, -1);
-            while (!quit)
+        bool quitGame = false;
+        int level = 7;
+        while (level <= 107 && !quitGame)
+        {
+            box(); Person(); Map(); wall();
+            cout << "boxCount: " << Box.boxCount << " " << "goalCount: " << Box.goalCount << " " << "wallCount: " << Wall.wallCount << '\n';
+           // Box.boxCount = 0; Box.goalCount = 0; Wall.wallCount = 0;
+            if (!loadMedia(level))
             {
-                if (Box.winCheck() == true)
+                cout << "Failed to load media" << '\n';
+            }
+            else
+            {
+
+                bool quit = false;
+                SDL_Event e;
+                person.setPosX (gameMap.XpersonPosition);
+                person.setPosY (gameMap.YpersonPosition);
+                SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+                SDL_RenderClear (renderer);
+
+                // left feet or right feet
+                //          v
+                int      left = 0, direction = 0, xPerson = person.getPosX(), yPerson = person.getPosY();
+
+                SDL_Rect personRect, currentClip;
+                personRect = {xPerson, yPerson, 50, 50};
+                // play theme music
+                Mix_PlayChannel (-1, themeMusic, -1);
+                while (!quit)
                 {
-                    cout << "you win" ; quit = true;
-                    SDL_Delay (1000);
-                }
-                gameMap.renderMap (renderer);
-                Box.renderBox (renderer);
-                Wall.renderWall (renderer);
-                while (SDL_PollEvent (&e) != 0)
-                {
-                    if (e.type == SDL_QUIT)
+                    gameMap.renderMap (renderer);
+                    Box.renderBox (renderer);
+                    Wall.renderWall (renderer);
+                    while (SDL_PollEvent (&e) != 0)
                     {
-                        quit = true;
-                    }
-                    else if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
-                    {
-                        person.setVelX (0);
-                        person.setVelY (0);
-                        person.distance = 0;
-                        person.handleEvent ( direction, left, e);
-                        while (person.distance < 50)
+                        if (e.type == SDL_QUIT)
                         {
-                            // switch feet
-                            if (person.distance % 10 == 0)
+                            quit = true;
+                            quitGame = true;
+                        }
+                        else if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+                        {
+                            person.setVelX (0);
+                            person.setVelY (0);
+                            person.distance = 0;
+                            person.handleEvent ( direction, left, e);
+                            while (person.distance < 50)
                             {
-                                if (left == 1) left = 0;
-                                else left = 1;
+                                // switch feet
+                                if (person.distance % 10 == 0)
+                                {
+                                    if (left == 1) left = 0;
+                                    else left = 1;
+                                }
+
+                                currentClip = movingPerson[direction][left];
+                                person.moveAndCheckCollision (personRect, Box.boxRect, Box.boxCount, Wall.wallRect, Wall.wallCount);
+                                SDL_RenderClear(renderer);
+                                //render
+                                gameMap.renderMap (renderer);
+                                Box.renderBox (renderer);
+                                Wall.renderWall (renderer);
+                                person.renderPerson(renderer, currentClip);
+                                SDL_RenderPresent (renderer);
+
+                                person.distance++;
+                                SDL_Delay (5);
                             }
-
-                            currentClip = movingPerson[direction][left];
-                            person.moveAndCheckCollision (personRect, Box.boxRect, Box.boxCount, Wall.wallRect, Wall.wallCount);
-                            SDL_RenderClear(renderer);
-                            //render
-                            gameMap.renderMap (renderer);
-                            Box.renderBox (renderer);
-                            Wall.renderWall (renderer);
-                            person.renderPerson(renderer, currentClip);
-                            SDL_RenderPresent (renderer);
-
-                            person.distance++;
-                            SDL_Delay (5);
                         }
                     }
+                    currentClip = standingPerson [direction];
+                    person.renderPerson(renderer, currentClip);
+                    SDL_RenderPresent(renderer);
+                    if (Box.winCheck() == true)
+                    {
+                        cout << "you win" << '\n' ;
+                        quit = true;
+                        SDL_Delay (1000);
+                        gameMap.clearMapData();
+                        level ++;
+                    }
                 }
-                currentClip = standingPerson [direction];
-                person.renderPerson(renderer, currentClip);
-                SDL_RenderPresent(renderer);
             }
         }
     }

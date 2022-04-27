@@ -20,16 +20,19 @@ public:
     SDL_Rect boxRect[100];
     int XboxPosition [100];
     int YboxPosition [100];
+    void clearBoxData ();
 
     int goalCount = 0;
     int XgoalPosition [100];
     int YgoalPosition[100];
     bool scoredGoals [100];
+    void clearGoalData ();
 
     bool winCheck ();
     void loadBoxTexture (SDL_Renderer* renderer);
     void loadBoxData(const Map& gameMap);
     void renderBox (SDL_Renderer* renderer);
+
 
 };
 

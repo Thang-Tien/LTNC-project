@@ -17,7 +17,9 @@ public:
     string mapDataPreLoad[14];
     char mapData[24][14];
     SDL_Rect mapRect[24][14];
+
     void loadMapData (SDL_Renderer* renderer, string path);
+    void clearMapData ();
     void renderMap (SDL_Renderer* renderer);
 
     int XpersonPosition;

@@ -1,5 +1,9 @@
 #include "wall.h"
 
+wall::wall ()
+{
+    wallCount = 0;
+}
 void wall::loadWallTexture (SDL_Renderer* renderer)
 {
     wallTexture.loadFromFile (renderer, "wall.png");
@@ -23,3 +27,4 @@ void wall::renderWall(SDL_Renderer* renderer)
         wallTexture.render (renderer, wallRect[i].x, wallRect[i].y);
     }
 }
+

@@ -71,7 +71,7 @@ bool LTexture::loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font,stri
     return newTexture != NULL;
 }
 
-void LTexture:: free()
+void LTexture::free()
 {
     if (texture != NULL)
     {
