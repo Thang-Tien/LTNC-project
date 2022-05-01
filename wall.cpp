@@ -14,9 +14,7 @@ void wall::loadWallData (const Map& gameMap)
     wallCount = gameMap.wallCount;
     for (int i = 0; i < wallCount; i++)
     {
-        XwallPosition[i] = gameMap.XwallPosition[i];
-        YwallPosition[i] = gameMap.YwallPosition[i];
-        wallRect[i] = {XwallPosition[i], YwallPosition[i], 50, 50};
+        wallRect[i] = {gameMap.XwallPosition[i], gameMap.YwallPosition[i], 50, 50};
     }
 }
 

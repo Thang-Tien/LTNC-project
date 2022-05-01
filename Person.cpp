@@ -48,7 +48,7 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
 
 }
 
-void Person::moveAndCheckCollision (SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount, SDL_Rect wallRect[], int& wallCount)
+void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount, SDL_Rect wallRect[], int& wallCount)
 {
     posX += velX;
     posY += velY;
@@ -81,13 +81,17 @@ void Person::moveAndCheckCollision (SDL_Rect& personRect, SDL_Rect boxRect[], in
     }
 
     // box vs box collision check
+
     for (int i = 0; i < boxCount; i++)
     {
         personRect = {posX, posY, personRect.w, personRect.h};
         for (int j = i + 1; j < boxCount; j++)
         {
+
                 if (checkCollision (boxRect[i], boxRect[j]) == true)
+               // if (checkCollision (personRect, boxRect[j]) == true)
                 {
+
                     if (velX > 0)
                     {
                         boxRect[i].x = boxRect[j].x - 50;
@@ -110,6 +114,7 @@ void Person::moveAndCheckCollision (SDL_Rect& personRect, SDL_Rect boxRect[], in
                     }
                     personRect = {posX, posY, personRect.w, personRect.h};
                 }
+                break;
         }
     }
 

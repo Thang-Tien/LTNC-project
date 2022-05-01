@@ -14,7 +14,7 @@ void Map::renderMap(SDL_Renderer* renderer)
     for (int j = 0; j < 14; j++)
     {
         x = 0;
-        for (int i = 0; i < 24; i++)
+        for (int i = 0; i < 17; i++)
         {
             mapTexture[i][j].render(renderer, x, y);
             x += 50;
@@ -24,9 +24,6 @@ void Map::renderMap(SDL_Renderer* renderer)
 }
 void Map::loadMapData (SDL_Renderer* renderer, string path)
 {
-    boxCount = 0;
-    wallCount = 0;
-    goalCount = 0;
     ifstream fi (path.c_str());
     int x = 0, y = 0, i = 0, j = 0;
     for (i = 0; i < 14; i++)
@@ -36,17 +33,15 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
     for (j = 0; j < 14; j++)
     {
         string stringTemp = mapDataPreLoad[j];
-        for (i = 0; i < 24; i++)
+        for (i = 0; i < 17; i++)
         {
             mapData[i][j] = stringTemp[i];
-            cout << mapData[i][j];
         }
-        cout << '\n';
     }
     for (j = 0; j < 14; j++)
     {
         x = 0;
-        for (i = 0; i < 24; i++)
+        for (i = 0; i < 17; i++)
         {
             mapRect[i][j] = {x, y, 50, 50};
             if (mapData[i][j] == ' ')
@@ -106,13 +101,9 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
     }
 
 }
-void Map::clearMapData ()
+void Map::resetMapData ()
 {
-    for (int j = 0; j < 14; j++)
-    {
-        for (int i = 0; i < 24; i++)
-        {
-            mapTexture[i][j].free();
-        }
-    }
+    boxCount = 0;
+    wallCount = 0;
+    goalCount = 0;
 }

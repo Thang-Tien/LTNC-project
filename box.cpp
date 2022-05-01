@@ -1,4 +1,5 @@
 #include "box.h"
+using std::swap;
 using std::cout;
 box::box()
 {
@@ -16,10 +17,10 @@ void box::renderBox (SDL_Renderer* renderer)
     {
         for (int i = 0; i < boxCount; i++)
         {
-            if (XgoalPosition[j] == boxRect[i].x && YgoalPosition[j] == boxRect[i].y)
+            if (goalRect[j].x == boxRect[i].x && goalRect[j].y == boxRect[i].y)
             {
                 scoredGoals[j] = true;
-                boxWinTexture.render(renderer, XgoalPosition[j], YgoalPosition[j]);
+                boxWinTexture.render(renderer, goalRect[j].x,goalRect[j].y);
                 break;
             }
             else
@@ -39,15 +40,12 @@ void box::loadBoxData (const Map& gameMap)
     boxCount = gameMap.boxCount;
     for (int i = 0; i < boxCount; i++)
     {
-        XboxPosition [i] = gameMap.XboxPosition[i];
-        YboxPosition [i] = gameMap.YboxPosition[i];
-        boxRect[i] = {XboxPosition[i], YboxPosition[i], 50, 50};
+        boxRect[i] = {gameMap.XboxPosition[i], gameMap.YboxPosition[i], 50, 50};
     }
     goalCount = gameMap.goalCount;
     for (int i = 0; i < goalCount; i++)
     {
-        XgoalPosition [i] = gameMap.XgoalPosition[i];
-        YgoalPosition [i] = gameMap.YgoalPosition[i];
+        goalRect[i] = {gameMap.XgoalPosition[i], gameMap.YgoalPosition[i], 50, 50};
         scoredGoals[i] = false;
     }
 }
@@ -61,5 +59,25 @@ bool box::winCheck ()
         }
     }
     return true;
+}
+void box::sortBox()
+{
+    for (int i = 0; i < boxCount; i++)
+    {
+        for (int j = i + 1; j < boxCount; j++)
+        {
+            if (boxRect[j].x < boxRect[i].x)
+            {
+                swap (boxRect[i], boxRect[j]);
+            }
+            if (boxRect[i].x == boxRect[i].y)
+            {
+                if (boxRect[j].y < boxRect[i].y)
+                {
+                    swap (boxRect[i], boxRect[j]);
+                }
+            }
+        }
+    }
 }
 

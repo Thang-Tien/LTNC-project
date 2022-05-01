@@ -13,13 +13,14 @@ class Map:public LTexture
 {
 public:
     Map();
-    LTexture mapTexture[24][14];
-    string mapDataPreLoad[14];
-    char mapData[24][14];
-    SDL_Rect mapRect[24][14];
+    LTexture mapTexture[17][16];
+    string mapDataPreLoad[16];
+
+    char mapData[17][16];
+    SDL_Rect mapRect[17][16];
 
     void loadMapData (SDL_Renderer* renderer, string path);
-    void clearMapData ();
+    void resetMapData ();
     void renderMap (SDL_Renderer* renderer);
 
     int XpersonPosition;

@@ -9,6 +9,7 @@
 #include <SDL_mixer.h>
 #include "LTexture.h"
 #include "Map.h"
+#include <algorithm>
 class box:public LTexture
 {
 public:
@@ -17,22 +18,19 @@ public:
     LTexture boxWinTexture;
 
     int boxCount = 0;
-    SDL_Rect boxRect[100];
-    int XboxPosition [100];
-    int YboxPosition [100];
+    SDL_Rect boxRect[50];
     void clearBoxData ();
 
     int goalCount = 0;
-    int XgoalPosition [100];
-    int YgoalPosition[100];
-    bool scoredGoals [100];
+    SDL_Rect goalRect [50];
+    bool scoredGoals [50];
     void clearGoalData ();
 
     bool winCheck ();
     void loadBoxTexture (SDL_Renderer* renderer);
     void loadBoxData(const Map& gameMap);
     void renderBox (SDL_Renderer* renderer);
-
+    void sortBox();
 
 };
 

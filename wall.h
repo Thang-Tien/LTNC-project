@@ -16,8 +16,6 @@ public:
     LTexture wallTexture;
     wall ();
     int wallCount = 0;
-    int XwallPosition [100];
-    int YwallPosition [100];
     SDL_Rect wallRect [100];
 
     void loadWallData (const Map& gameMap);
