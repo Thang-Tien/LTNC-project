@@ -6,7 +6,7 @@ wall::wall ()
 }
 void wall::loadWallTexture (SDL_Renderer* renderer)
 {
-    wallTexture.loadFromFile (renderer, "wall.png");
+    wallTexture.loadFromFile (renderer, "images/wall.png");
 }
 
 void wall::loadWallData (const Map& gameMap)

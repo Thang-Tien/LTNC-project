@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include "LTexture.h"
+#include "box.h"
 class Person:public LTexture
 {
 public:
@@ -18,6 +19,7 @@ public:
     int distance;
     void setVelX (int x);
     void setVelY (int y);
+    bool goHorizontal, goVertical;
 private:
     int velX, velY;
 };

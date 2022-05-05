@@ -1,12 +1,14 @@
 #include "Person.h"
 using std::cout;
+using std::swap;
 Person::Person()
 {
     LTexture();
-
     velX = 0;
     velY = 0;
     distance = 0;
+    goHorizontal = false;
+    goVertical = false;
 }
 
 void Person::handleEvent (int& direction, int& left, SDL_Event& e)
@@ -19,29 +21,34 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
         {
             velY -= 1;
             direction = 3;
+            goVertical = true;
             break;
-
         }
         case SDLK_DOWN:
         {
             velY += 1;
             direction = 0;
+            goVertical = true;
             break;
-
         }
         case SDLK_LEFT:
         {
             velX -= 1;
             direction = 1;
+            goHorizontal = true;
             break;
-
         }
         case SDLK_RIGHT:
         {
-
             velX += 1;
             direction = 2;
+            goHorizontal = true;
             break;
+        }
+        default:
+        {
+            goVertical = false;
+            goHorizontal = false;
         }
         }
     }
@@ -81,17 +88,27 @@ void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect
     }
 
     // box vs box collision check
-
-    for (int i = 0; i < boxCount; i++)
+    if (goHorizontal == true)
     {
-        personRect = {posX, posY, personRect.w, personRect.h};
-        for (int j = i + 1; j < boxCount; j++)
+        // sort box by x
+        for (int i = 0; i < boxCount; i++)
         {
-
-                if (checkCollision (boxRect[i], boxRect[j]) == true)
-               // if (checkCollision (personRect, boxRect[j]) == true)
+            for (int j = i + 1; j < boxCount; j++)
+            {
+                if (boxRect[j].x < boxRect[i].x)
                 {
-
+                    swap (boxRect[i], boxRect[j]);
+                }
+            }
+        }
+        // check box vs box collision horizontal
+        for (int i = 0; i < boxCount; i++)
+        {
+            personRect = {posX, posY, personRect.w, personRect.h};
+            for (int j = i + 1; j < boxCount; j++)
+            {
+                if (checkCollision (boxRect[i], boxRect[j]) == true)
+                {
                     if (velX > 0)
                     {
                         boxRect[i].x = boxRect[j].x - 50;
@@ -102,6 +119,32 @@ void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect
                         boxRect[j].x = boxRect[i].x + 50;
                         posX = boxRect[i].x + 100;
                     }
+                    personRect = {posX, posY, personRect.w, personRect.h};
+                }
+            }
+        }
+    }
+    else if (goVertical == true)
+    {
+        // sort box for y
+        for (int i = 0; i < boxCount; i++)
+        {
+            for (int j = i + 1; j < boxCount; j++)
+            {
+                if (boxRect[j].y < boxRect[i].y)
+                {
+                    swap (boxRect[i], boxRect[j]);
+                }
+            }
+        }
+        // check box vs box collision vertical
+        for (int i = 0; i < boxCount; i++)
+        {
+            personRect = {posX, posY, personRect.w, personRect.h};
+            for (int j = i + 1; j < boxCount; j++)
+            {
+                if (checkCollision (boxRect[i], boxRect[j]) == true)
+                {
                     if (velY > 0)
                     {
                         boxRect[i].y = boxRect[j].y - 50;
@@ -114,10 +157,9 @@ void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect
                     }
                     personRect = {posX, posY, personRect.w, personRect.h};
                 }
-                break;
+            }
         }
     }
-
     // person vs wall collision check
     for (int i = 0; i < wallCount; i++)
     {
@@ -128,6 +170,7 @@ void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect
             personRect = {posX, posY, personRect.w, personRect.h};
         }
     }
+
     // box vs wall collision check
     for (int i = 0; i < boxCount; i++)
     {
@@ -159,9 +202,6 @@ void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect
             }
         }
     }
-
-
-
 }
 
 void Person::renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip)

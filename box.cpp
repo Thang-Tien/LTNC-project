@@ -32,8 +32,8 @@ void box::renderBox (SDL_Renderer* renderer)
 }
 void box::loadBoxTexture (SDL_Renderer* renderer)
 {
-    boxTexture.loadFromFile (renderer, "box.png");
-    boxWinTexture.loadFromFile (renderer, "box_win.png");
+    boxTexture.loadFromFile (renderer, "images/box.png");
+    boxWinTexture.loadFromFile (renderer, "images/box_win.png");
 }
 void box::loadBoxData (const Map& gameMap)
 {
@@ -60,7 +60,7 @@ bool box::winCheck ()
     }
     return true;
 }
-void box::sortBox()
+void box::sortBoxByX()
 {
     for (int i = 0; i < boxCount; i++)
     {
@@ -70,12 +70,19 @@ void box::sortBox()
             {
                 swap (boxRect[i], boxRect[j]);
             }
-            if (boxRect[i].x == boxRect[i].y)
+        }
+    }
+}
+
+void box::sortBoxByY()
+{
+    for (int i = 0; i < boxCount; i++)
+    {
+        for (int j = i + 1; j < boxCount; j++)
+        {
+            if (boxRect[j].y < boxRect[i].y)
             {
-                if (boxRect[j].y < boxRect[i].y)
-                {
-                    swap (boxRect[i], boxRect[j]);
-                }
+                swap (boxRect[i], boxRect[j]);
             }
         }
     }

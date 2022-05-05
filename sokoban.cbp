@@ -40,7 +40,10 @@
 		<Unit filename="Person.h" />
 		<Unit filename="box.cpp" />
 		<Unit filename="box.h" />
+		<Unit filename="button.cpp" />
+		<Unit filename="button.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="score.h" />
 		<Unit filename="wall.cpp" />
 		<Unit filename="wall.h" />
 		<Extensions>

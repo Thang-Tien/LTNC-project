@@ -30,7 +30,8 @@ public:
     void loadBoxTexture (SDL_Renderer* renderer);
     void loadBoxData(const Map& gameMap);
     void renderBox (SDL_Renderer* renderer);
-    void sortBox();
+    void sortBoxByX();
+    void sortBoxByY();
 
 };
 

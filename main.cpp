@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "box.h"
 #include "wall.h"
+#include "button.h"
 
 using std::cout;
 using std::to_string;
@@ -18,7 +19,7 @@ TTF_Font* font = NULL;
 LTexture textTexture;
 SDL_Rect movingPerson[4][2];
 SDL_Rect standingPerson[4];
-
+int direction = 0;
 Mix_Chunk* boxSlidingSound;
 Mix_Chunk* themeMusic;
 
@@ -26,7 +27,10 @@ Person person;
 Map gameMap;
 box Box;
 wall Wall;
-
+button Button[totalButton];
+SDL_Rect personRect, currentClip;
+SDL_Rect buttonRect [totalButton];
+SDL_Rect mouseRect;
 // khoi tao
 bool init()
 {
@@ -77,6 +81,20 @@ bool init()
                     cout << "Unable to initialize mixer, Error: " << SDL_GetError() << '\n';
                     success = false;
                 }
+                else
+                {
+                    int restartButton_Width = 60, undoButton_Width = 60,
+                        previousLevelButton_Width =  107,
+                        nextLevelButton_Width =  107;
+                    Button[restartButton].setPosition (SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width, 0);
+                    Button[undoButton].setPosition (SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width, 0);
+                    Button[previousLevelButton].setPosition (SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width, 0);
+                    Button[nextLevelButton].setPosition (SCREEN_WIDTH - nextLevelButton_Width, 0);
+                    buttonRect[restartButton] = {Button[restartButton].buttonPosition.x, Button[restartButton].buttonPosition.y, 60, 60};
+                    buttonRect[undoButton] = {Button[undoButton].buttonPosition.x, Button[undoButton].buttonPosition.y, 60, 60};
+                    buttonRect[previousLevelButton] = {Button[previousLevelButton].buttonPosition.x, Button[previousLevelButton].buttonPosition.y, 107, 60};
+                    buttonRect[nextLevelButton] = {Button[nextLevelButton].buttonPosition.x, Button[nextLevelButton].buttonPosition.y, 107, 60};
+                }
             }
         }
     }
@@ -86,13 +104,14 @@ bool init()
 bool loadMedia(int level)
 {
     bool success = true;
-    if (!person.loadFromFile (renderer, "player.png"))
+    if (!person.loadFromFile (renderer, "images/player.png"))
     {
         cout << "Failed to load person texture, Error: " << SDL_GetError() << '\n';
         success = false;
     }
     else
     {
+        // load moving person
         int y = 0;
         for (int i=0; i<4; i++)
         {
@@ -104,47 +123,55 @@ bool loadMedia(int level)
             }
             y += 50;
         }
+        // load standing person
         y = 0;
         for (int i=0; i<4; i++)
         {
             standingPerson[i] = {50, y, 50, 50};
             y += 50;
         }
+        // load theme music
         themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
         if (themeMusic == NULL)
         {
             cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
-        }
-        boxSlidingSound = Mix_LoadWAV ("box-sliding-sound-effect.wav");
-        if (boxSlidingSound == NULL)
-        {
-            cout << "Failed to load box sliding sound, Erorr: " << SDL_GetError() << '\n';
-        }
-
-        gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
-        Box.loadBoxData (gameMap);
-        Box.loadBoxTexture (renderer);
-        Wall.loadWallData (gameMap);
-        Wall.loadWallTexture (renderer);
-        //Open the font
-        font = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 50 );
-        if( font == NULL )
-        {
-            cout << " Failed to load font, Error: " << TTF_GetError() << '\n';
             success = false;
         }
         else
         {
-            //Render text
-            SDL_Color textColor = { 0, 0, 0 };
-            if( !textTexture.loadFromRenderedText(renderer, font, "Level: " + to_string(level), textColor ) )
+            // load map data
+            gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
+            Box.loadBoxData (gameMap);
+            Box.loadBoxTexture (renderer);
+            Wall.loadWallData (gameMap);
+            Wall.loadWallTexture (renderer);
+
+            //Open the font
+            font = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 50 );
+            if( font == NULL )
             {
-                cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
+                cout << " Failed to load font, Error: " << TTF_GetError() << '\n';
                 success = false;
+            }
+            else
+            {
+                //Render level text
+                SDL_Color textColor = { 0, 0, 0 };
+                if( !textTexture.loadFromRenderedText(renderer, font, "Level: " + to_string(level), textColor ) )
+                {
+                    cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
+                    success = false;
+                }
+                else
+                {
+                    Button[restartButton].loadButton (renderer, "images/restart.png");
+                    Button[nextLevelButton].loadButton (renderer, "images/next_level.png");
+                    Button[previousLevelButton].loadButton (renderer, "images/previous_level.png");
+                    Button[undoButton].loadButton (renderer, "images/undo.png");
+                }
             }
         }
     }
-
     return success;
 }
 
@@ -168,7 +195,19 @@ void close()
     exit(1);
 }
 
-//void handleEvent ()
+void renderEverything()
+{
+    gameMap.renderMap (renderer);
+    Box.renderBox (renderer);
+    Wall.renderWall (renderer);
+    textTexture.render(renderer, 0, 0);
+    person.renderPerson(renderer, currentClip);
+    for (int i = 0; i < totalButton; i++)
+    {
+        Button[i].renderButton(renderer);
+    }
+    SDL_RenderPresent(renderer);
+}
 int main(int argc, char* args[])
 {
     if (!init())
@@ -178,7 +217,7 @@ int main(int argc, char* args[])
     else
     {
         bool quitGame = false, isPlayingMusic = false;
-        int level = 0;
+        int level = 0, x, y;
         while (level <= 107 && !quitGame)
         {
 
@@ -188,18 +227,17 @@ int main(int argc, char* args[])
             }
             else
             {
-                bool quit = false;
-                SDL_Event e;
                 person.setPosX (gameMap.XpersonPosition);
                 person.setPosY (gameMap.YpersonPosition);
+                bool quit = false, mouseIn = false;
+                SDL_Event e;
                 SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                 SDL_RenderClear (renderer);
 
                 // left feet or right feet
                 //          v
-                int      left = 0, direction = 0;
-
-                SDL_Rect personRect, currentClip;
+                int      left = 0, currentButton;
+                // set person initial position
                 personRect = {person.getPosX(), person.getPosY(), 50, 50};
                 // play theme music
                 if (!isPlayingMusic)
@@ -209,10 +247,27 @@ int main(int argc, char* args[])
                 }
                 while (!quit)
                 {
-                    gameMap.renderMap (renderer);
-                    Box.renderBox (renderer);
-                    Wall.renderWall (renderer);
-                    textTexture.render(renderer, 0, 0);
+                    currentClip = standingPerson [direction];
+
+                    // render
+                    renderEverything();
+
+                    // get mouse position
+                    SDL_GetMouseState (&x, &y);
+                    mouseRect = {x, y, 1, 1};
+                    mouseIn = false;
+
+                    person.goHorizontal = false;
+                    person.goVertical = false;
+                    for (int i = 0; i < totalButton; i++)
+                    {
+                            if (Button[i].checkCollision (mouseRect, buttonRect[i]) == true)
+                            {
+                                currentButton = i;
+                                mouseIn = true;
+                                break;
+                            }
+                    }
                     while (SDL_PollEvent (&e) != 0)
                     {
                         if (e.type == SDL_QUIT)
@@ -220,60 +275,79 @@ int main(int argc, char* args[])
                             quit = true;
                             quitGame = true;
                         }
-                        else if (e.type == SDL_KEYDOWN && e.key.repeat == 0 && (e.key.keysym.sym == SDLK_r ||
-                                 e.key.keysym.sym == SDLK_UP ||
-                                 e.key.keysym.sym == SDLK_DOWN ||
-                                 e.key.keysym.sym == SDLK_LEFT ||
-                                 e.key.keysym.sym == SDLK_RIGHT) )
+                        // check if mouse is in the button
+                        else if (e.type == SDL_MOUSEBUTTONDOWN)
                         {
-                            // restart level
-                            if (e.key.keysym.sym == SDLK_r)
+
+                            if (mouseIn == true)
                             {
-                                cout << "restart level" << '\n';
-                                quit = true;
-                                gameMap.resetMapData();
-                            }
-                            else
-                            {
-                                person.setVelX (0);
-                                person.setVelY (0);
-                                person.distance = 0;
-                                person.handleEvent ( direction, left, e);
-                                while (person.distance < 50)
+                                switch (currentButton)
                                 {
-                                    // switch feet
-                                    if (person.distance % 10 == 0)
+                                    case restartButton:
                                     {
-                                        if (left == 1) left = 0;
-                                        else left = 1;
+                                        quit = true;
+                                        gameMap.resetMapData();
+                                        break;
                                     }
-                                    currentClip = movingPerson[direction][left];
-                                    // move and check coliision
-                                    person.moveAndCheckCollision (renderer, personRect, Box.boxRect, Box.boxCount, Wall.wallRect, Wall.wallCount);
-                                    // sort boxes position
-                                    Box.sortBox();
-                                    SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-                                    SDL_RenderClear(renderer);
-
-                                    // render
-                                    gameMap.renderMap (renderer);
-                                    Box.renderBox (renderer);
-                                    Wall.renderWall (renderer);
-                                    person.renderPerson(renderer, currentClip);
-                                    textTexture.render(renderer, 0, 0);
-                                    SDL_RenderPresent (renderer);
-
-                                    // update distance
-                                    person.distance++;
-                                    SDL_Delay (5);
+                                    case undoButton:
+                                    {
+                                        break;
+                                    }
+                                    case previousLevelButton:
+                                    {
+                                        quit = true;
+                                        level --;
+                                        if (level < 0) {level = 0;}
+                                        gameMap.resetMapData();
+                                        break;
+                                    }
+                                    case nextLevelButton:
+                                    {
+                                        quit = true;
+                                        level ++;
+                                        gameMap.resetMapData();
+                                        break;
+                                    }
                                 }
+                            }
+                        }
+
+                        else if ((e.type == SDL_KEYDOWN && e.key.repeat == 0) &&
+                                 (e.key.keysym.sym == SDLK_UP ||
+                                  e.key.keysym.sym == SDLK_DOWN ||
+                                  e.key.keysym.sym == SDLK_LEFT ||
+                                  e.key.keysym.sym == SDLK_RIGHT))
+                        {
+                            person.setVelX (0);
+                            person.setVelY (0);
+                            person.distance = 0;
+                            person.handleEvent ( direction, left, e);
+                            // moving animation
+                            while (person.distance < 50)
+                            {
+                                // switch feet
+                                if (person.distance % 10 == 0)
+                                {
+                                    if (left == 1) left = 0;
+                                    else left = 1;
+                                }
+                                currentClip = movingPerson[direction][left];
+                                person.moveAndCheckCollision (renderer, personRect, Box.boxRect, Box.boxCount, Wall.wallRect, Wall.wallCount);
+
+                                // clear existed screen
+                                SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+                                SDL_RenderClear(renderer);
+
+                                // render while person is running
+                                renderEverything();
+
+                                // update distance
+                                person.distance++;
+                                SDL_Delay (5);
                             }
 
                         }
                     }
-                    currentClip = standingPerson [direction];
-                    person.renderPerson(renderer, currentClip);
-                    SDL_RenderPresent(renderer);
                     if (Box.winCheck() == true)
                     {
                         cout << "you win" << '\n' ;
@@ -281,6 +355,7 @@ int main(int argc, char* args[])
                         gameMap.resetMapData();
                         level ++;
                     }
+
                 }
             }
         }
