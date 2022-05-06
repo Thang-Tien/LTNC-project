@@ -3,7 +3,6 @@ using std::cout;
 using std::swap;
 Person::Person()
 {
-    LTexture();
     velX = 0;
     velY = 0;
     distance = 0;

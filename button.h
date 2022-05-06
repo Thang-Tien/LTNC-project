@@ -15,6 +15,10 @@ enum buttonType
     nextLevelButton,
     previousLevelButton,
     undoButton,
+    restartButton_MouseIn,
+    nextLevelButton_MouseIn,
+    previousLevelButton_MouseIn,
+    undoButton_MouseIn,
     totalButton
 };
 class button:public LTexture
@@ -23,16 +27,20 @@ class button:public LTexture
 		//Initializes internal variables
 		LButton();
 		//Sets top left position
-		void setPosition( int x, int y );
+		void setPosition(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 		//Shows button
 		void renderButton(SDL_Renderer* renderer);
         // load button texture
-        void loadButton(SDL_Renderer* renderer, string path);
-
+        void loadButton(SDL_Renderer* renderer);
         bool isClicked = false;
-		//Top left position
-		SDL_Point buttonPosition;
-		LTexture buttonTexture;
+        void handleMouseIn (SDL_Renderer* renderer, SDL_Event& e);
+        void checkMouseIn ();
+
+        bool mouseIn;
+        int currentButton;
+		SDL_Rect mouseRect;
+		SDL_Rect buttonRect [totalButton];
+		LTexture buttonTexture[totalButton];
 
 };
 #endif // buttonClass

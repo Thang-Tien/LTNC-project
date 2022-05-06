@@ -5,7 +5,7 @@
 #include "box.h"
 #include "wall.h"
 #include "button.h"
-
+#include "score.h"
 using std::cout;
 using std::to_string;
 const int SCREEN_WIDTH = 850;
@@ -27,10 +27,10 @@ Person person;
 Map gameMap;
 box Box;
 wall Wall;
-button Button[totalButton];
+score Score;
+button Button;
 SDL_Rect personRect, currentClip;
-SDL_Rect buttonRect [totalButton];
-SDL_Rect mouseRect;
+
 // khoi tao
 bool init()
 {
@@ -81,20 +81,7 @@ bool init()
                     cout << "Unable to initialize mixer, Error: " << SDL_GetError() << '\n';
                     success = false;
                 }
-                else
-                {
-                    int restartButton_Width = 60, undoButton_Width = 60,
-                        previousLevelButton_Width =  107,
-                        nextLevelButton_Width =  107;
-                    Button[restartButton].setPosition (SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width, 0);
-                    Button[undoButton].setPosition (SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width, 0);
-                    Button[previousLevelButton].setPosition (SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width, 0);
-                    Button[nextLevelButton].setPosition (SCREEN_WIDTH - nextLevelButton_Width, 0);
-                    buttonRect[restartButton] = {Button[restartButton].buttonPosition.x, Button[restartButton].buttonPosition.y, 60, 60};
-                    buttonRect[undoButton] = {Button[undoButton].buttonPosition.x, Button[undoButton].buttonPosition.y, 60, 60};
-                    buttonRect[previousLevelButton] = {Button[previousLevelButton].buttonPosition.x, Button[previousLevelButton].buttonPosition.y, 107, 60};
-                    buttonRect[nextLevelButton] = {Button[nextLevelButton].buttonPosition.x, Button[nextLevelButton].buttonPosition.y, 107, 60};
-                }
+                Button.setPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
             }
         }
     }
@@ -104,74 +91,68 @@ bool init()
 bool loadMedia(int level)
 {
     bool success = true;
+    // load person image
     if (!person.loadFromFile (renderer, "images/player.png"))
     {
         cout << "Failed to load person texture, Error: " << SDL_GetError() << '\n';
         success = false;
     }
-    else
-    {
-        // load moving person
-        int y = 0;
-        for (int i=0; i<4; i++)
-        {
-            int x = 0;
-            for (int j=0; j<2; j++)
-            {
-                movingPerson[i][j] = {x, y, 50, 50};
-                x += 100;
-            }
-            y += 50;
-        }
-        // load standing person
-        y = 0;
-        for (int i=0; i<4; i++)
-        {
-            standingPerson[i] = {50, y, 50, 50};
-            y += 50;
-        }
-        // load theme music
-        themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
-        if (themeMusic == NULL)
-        {
-            cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
-            success = false;
-        }
-        else
-        {
-            // load map data
-            gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
-            Box.loadBoxData (gameMap);
-            Box.loadBoxTexture (renderer);
-            Wall.loadWallData (gameMap);
-            Wall.loadWallTexture (renderer);
 
-            //Open the font
-            font = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 50 );
-            if( font == NULL )
-            {
-                cout << " Failed to load font, Error: " << TTF_GetError() << '\n';
-                success = false;
-            }
-            else
-            {
-                //Render level text
-                SDL_Color textColor = { 0, 0, 0 };
-                if( !textTexture.loadFromRenderedText(renderer, font, "Level: " + to_string(level), textColor ) )
-                {
-                    cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
-                    success = false;
-                }
-                else
-                {
-                    Button[restartButton].loadButton (renderer, "images/restart.png");
-                    Button[nextLevelButton].loadButton (renderer, "images/next_level.png");
-                    Button[previousLevelButton].loadButton (renderer, "images/previous_level.png");
-                    Button[undoButton].loadButton (renderer, "images/undo.png");
-                }
-            }
+    // load moving person
+    int y = 0;
+    for (int i=0; i<4; i++)
+    {
+        int x = 0;
+        for (int j=0; j<2; j++)
+        {
+            movingPerson[i][j] = {x, y, 50, 50};
+            x += 100;
         }
+        y += 50;
     }
+
+    // load standing person
+    y = 0;
+    for (int i=0; i<4; i++)
+    {
+        standingPerson[i] = {50, y, 50, 50};
+        y += 50;
+    }
+
+    // load theme music
+    themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
+    if (themeMusic == NULL)
+    {
+        cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
+        success = false;
+    }
+
+    // load map data
+    gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
+    Box.loadBoxData (gameMap);
+    Box.loadBoxTexture (renderer);
+    Wall.loadWallData (gameMap);
+    Wall.loadWallTexture (renderer);
+
+    //Open the font
+    font = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 50 );
+    if( font == NULL )
+    {
+        cout << " Failed to load font, Error: " << TTF_GetError() << '\n';
+        success = false;
+    }
+
+    //Render level text
+    SDL_Color textColor = { 0, 0, 0 };
+    if( !textTexture.loadFromRenderedText(renderer, font, "Level: " + to_string(level), textColor ) )
+    {
+        cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
+        success = false;
+    }
+
+    //Score.loadBestScore("scores/" + to_string(level) + ".txt");
+    Button.loadButton(renderer);
+
     return success;
 }
 
@@ -202,10 +183,8 @@ void renderEverything()
     Wall.renderWall (renderer);
     textTexture.render(renderer, 0, 0);
     person.renderPerson(renderer, currentClip);
-    for (int i = 0; i < totalButton; i++)
-    {
-        Button[i].renderButton(renderer);
-    }
+    Button.renderButton(renderer);
+    Score.renderScore(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_RenderPresent(renderer);
 }
 int main(int argc, char* args[])
@@ -217,7 +196,7 @@ int main(int argc, char* args[])
     else
     {
         bool quitGame = false, isPlayingMusic = false;
-        int level = 0, x, y;
+        int level = 50, x, y;
         while (level <= 107 && !quitGame)
         {
 
@@ -229,45 +208,46 @@ int main(int argc, char* args[])
             {
                 person.setPosX (gameMap.XpersonPosition);
                 person.setPosY (gameMap.YpersonPosition);
-                bool quit = false, mouseIn = false;
+                Score.currentSteps = 0;
+               // Score.currentTime = 0;
+                bool quit = false;
                 SDL_Event e;
                 SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                 SDL_RenderClear (renderer);
 
                 // left feet or right feet
                 //          v
-                int      left = 0, currentButton;
+                int      left = 0;
                 // set person initial position
                 personRect = {person.getPosX(), person.getPosY(), 50, 50};
+
                 // play theme music
                 if (!isPlayingMusic)
                 {
                     Mix_PlayChannel (-1, themeMusic, -1);
                     isPlayingMusic = true;
                 }
+                // set start time
+                Score.startTime = SDL_GetTicks();
+
+                // game loop
                 while (!quit)
                 {
+                    Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
+                    Score.loadTTFScore (renderer);
                     currentClip = standingPerson [direction];
-
                     // render
                     renderEverything();
-
-                    // get mouse position
-                    SDL_GetMouseState (&x, &y);
-                    mouseRect = {x, y, 1, 1};
-                    mouseIn = false;
-
+                    Button.mouseIn = true;
+                    Button.checkMouseIn();
+                    if (Button.mouseIn == true)
+                    {
+                        cout << "mouse in" << '\n';
+                        Button.handleMouseIn(renderer, e);
+                    }
                     person.goHorizontal = false;
                     person.goVertical = false;
-                    for (int i = 0; i < totalButton; i++)
-                    {
-                            if (Button[i].checkCollision (mouseRect, buttonRect[i]) == true)
-                            {
-                                currentButton = i;
-                                mouseIn = true;
-                                break;
-                            }
-                    }
+
                     while (SDL_PollEvent (&e) != 0)
                     {
                         if (e.type == SDL_QUIT)
@@ -278,11 +258,10 @@ int main(int argc, char* args[])
                         // check if mouse is in the button
                         else if (e.type == SDL_MOUSEBUTTONDOWN)
                         {
-
-                            if (mouseIn == true)
+                            if (Button.mouseIn == true)
                             {
-                                switch (currentButton)
-                                {
+                                switch (Button.currentButton)
+                                    {
                                     case restartButton:
                                     {
                                         quit = true;
@@ -297,7 +276,10 @@ int main(int argc, char* args[])
                                     {
                                         quit = true;
                                         level --;
-                                        if (level < 0) {level = 0;}
+                                        if (level < 0)
+                                        {
+                                            level = 0;
+                                        }
                                         gameMap.resetMapData();
                                         break;
                                     }
@@ -308,9 +290,9 @@ int main(int argc, char* args[])
                                         gameMap.resetMapData();
                                         break;
                                     }
+                                    }
                                 }
                             }
-                        }
 
                         else if ((e.type == SDL_KEYDOWN && e.key.repeat == 0) &&
                                  (e.key.keysym.sym == SDLK_UP ||
@@ -338,19 +320,26 @@ int main(int argc, char* args[])
                                 SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                                 SDL_RenderClear(renderer);
 
+                                Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
+                                Score.loadTTFScore (renderer);
+
                                 // render while person is running
                                 renderEverything();
 
                                 // update distance
                                 person.distance++;
-                                SDL_Delay (5);
+                                SDL_Delay (2);
                             }
-
+                            Score.currentSteps ++;
                         }
+
                     }
                     if (Box.winCheck() == true)
                     {
-                        cout << "you win" << '\n' ;
+                        if (Score.currentSteps < Score.bestSteps)
+                        {
+                            Score.bestSteps = Score.currentSteps;
+                        }
                         quit = true;
                         gameMap.resetMapData();
                         level ++;
