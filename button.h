@@ -9,6 +9,7 @@
 #include <SDL_mixer.h>
 #include <fstream>
 #include "LTexture.h"
+#include "Map.h"
 enum buttonType
 {
     restartButton,
@@ -34,6 +35,7 @@ class button:public LTexture
         void loadButton(SDL_Renderer* renderer);
         bool isClicked = false;
         void handleMouseIn (SDL_Renderer* renderer, SDL_Event& e);
+        void handleButton (Map& gameMap, bool& quit, int& level);
         void checkMouseIn ();
 
         bool mouseIn;

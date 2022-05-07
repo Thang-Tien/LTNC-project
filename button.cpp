@@ -1,5 +1,4 @@
 #include "button.h"
-
 button::LButton()
 {
     mouseIn = false;
@@ -10,14 +9,14 @@ void button::setPosition(int SCREEN_WIDTH, int SCREEN_HEIGHT)
     int restartButton_Width = 60, undoButton_Width = 60,
         previousLevelButton_Width =  109,
         nextLevelButton_Width =  109;
-    buttonRect[restartButton] = {SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 4, 0};
-    buttonRect[restartButton_MouseIn] = {SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 4, 0};
-    buttonRect[undoButton] = {SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 3, 0};
-    buttonRect[undoButton_MouseIn] = {SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 3, 0};
-    buttonRect[previousLevelButton] = {SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width - 2, 0};
-    buttonRect[previousLevelButton_MouseIn] = {SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width - 2, 0};
-    buttonRect[nextLevelButton] = {SCREEN_WIDTH - nextLevelButton_Width - 1, 0};
-    buttonRect[nextLevelButton_MouseIn] = {SCREEN_WIDTH - nextLevelButton_Width - 1, 0};
+    buttonRect[restartButton] = {SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 4, 0, restartButton_Width, 60};
+    buttonRect[restartButton_MouseIn] = {SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 4, 0, restartButton_Width, 60};
+    buttonRect[undoButton] = {SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 3, 0, undoButton_Width, 60};
+    buttonRect[undoButton_MouseIn] = {SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 3, 0, undoButton_Width, 60};
+    buttonRect[previousLevelButton] = {SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width - 2, 0, previousLevelButton_Width, 60};
+    buttonRect[previousLevelButton_MouseIn] = {SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width - 2, 0, previousLevelButton_Width, 60};
+    buttonRect[nextLevelButton] = {SCREEN_WIDTH - nextLevelButton_Width - 1, 0, nextLevelButton_Width, 60};
+    buttonRect[nextLevelButton_MouseIn] = {SCREEN_WIDTH - nextLevelButton_Width - 1, 0, nextLevelButton_Width, 60};
 }
 
 void button::renderButton(SDL_Renderer* renderer)
@@ -62,32 +61,64 @@ void button::checkMouseIn ()
 
 void button::handleMouseIn(SDL_Renderer* renderer, SDL_Event& e)
 {
-    if (mouseIn == true)
-    {
 
-        switch (currentButton)
+    switch (currentButton)
+    {
+    case restartButton:
+    {
+        buttonTexture[restartButton_MouseIn].render (renderer, buttonRect[restartButton_MouseIn].x, buttonRect[restartButton_MouseIn].y);
+        break;
+    }
+    case undoButton:
+    {
+        buttonTexture[undoButton_MouseIn].render (renderer, buttonRect[undoButton_MouseIn].x, buttonRect[undoButton_MouseIn].y);
+        break;
+    }
+    case previousLevelButton:
+    {
+        buttonTexture[previousLevelButton_MouseIn].render (renderer, buttonRect[previousLevelButton_MouseIn].x, buttonRect[previousLevelButton_MouseIn].y);
+        break;
+    }
+    case nextLevelButton:
+    {
+        buttonTexture[nextLevelButton_MouseIn].render (renderer, buttonRect[nextLevelButton_MouseIn].x, buttonRect[nextLevelButton_MouseIn].y);
+        break;
+    }
+    }
+
+}
+void button::handleButton(Map& gameMap, bool& quit, int& level)
+{
+    switch (currentButton)
+    {
+    case restartButton:
+    {
+        quit = true;
+        gameMap.resetMapData();
+        break;
+    }
+    case undoButton:
+    {
+        break;
+    }
+    case previousLevelButton:
+    {
+        quit = true;
+        level --;
+        if (level < 0)
         {
-        case restartButton:
-        {
-            buttonTexture[restartButton_MouseIn].render (renderer, buttonRect[restartButton_MouseIn].x, buttonRect[restartButton_MouseIn].y);
-            break;
+            level = 0;
         }
-        case undoButton:
-        {
-            buttonTexture[undoButton_MouseIn].render (renderer, buttonRect[undoButton_MouseIn].x, buttonRect[undoButton_MouseIn].y);
-            break;
-        }
-        case previousLevelButton:
-        {
-            buttonTexture[previousLevelButton_MouseIn].render (renderer, buttonRect[previousLevelButton_MouseIn].x, buttonRect[previousLevelButton_MouseIn].y);
-            break;
-        }
-        case nextLevelButton:
-        {
-            buttonTexture[nextLevelButton_MouseIn].render (renderer, buttonRect[nextLevelButton_MouseIn].x, buttonRect[nextLevelButton_MouseIn].y);
-            break;
-        }
-        }
+        gameMap.resetMapData();
+        break;
+    }
+    case nextLevelButton:
+    {
+        quit = true;
+        level ++;
+        gameMap.resetMapData();
+        break;
+    }
     }
 }
 

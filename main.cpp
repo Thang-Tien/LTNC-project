@@ -176,14 +176,20 @@ void close()
     exit(1);
 }
 
-void renderEverything()
+void renderEverything(SDL_Event& e)
 {
+    cout << "render" << '\n';
     gameMap.renderMap (renderer);
     Box.renderBox (renderer);
     Wall.renderWall (renderer);
     textTexture.render(renderer, 0, 0);
     person.renderPerson(renderer, currentClip);
     Button.renderButton(renderer);
+    Button.checkMouseIn();
+    if (Button.mouseIn == true)
+    {
+        Button.handleMouseIn(renderer, e);
+    }
     Score.renderScore(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_RenderPresent(renderer);
 }
@@ -196,7 +202,7 @@ int main(int argc, char* args[])
     else
     {
         bool quitGame = false, isPlayingMusic = false;
-        int level = 50, x, y;
+        int level = 1, x, y;
         while (level <= 107 && !quitGame)
         {
 
@@ -209,7 +215,8 @@ int main(int argc, char* args[])
                 person.setPosX (gameMap.XpersonPosition);
                 person.setPosY (gameMap.YpersonPosition);
                 Score.currentSteps = 0;
-               // Score.currentTime = 0;
+                direction = 0;
+                Score.currentTime = 0;
                 bool quit = false;
                 SDL_Event e;
                 SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
@@ -227,24 +234,21 @@ int main(int argc, char* args[])
                     Mix_PlayChannel (-1, themeMusic, -1);
                     isPlayingMusic = true;
                 }
+
                 // set start time
                 Score.startTime = SDL_GetTicks();
+
 
                 // game loop
                 while (!quit)
                 {
                     Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
-                    Score.loadTTFScore (renderer);
+                    //Score.loadTTFScore (renderer);
                     currentClip = standingPerson [direction];
+
                     // render
-                    renderEverything();
-                    Button.mouseIn = true;
-                    Button.checkMouseIn();
-                    if (Button.mouseIn == true)
-                    {
-                        cout << "mouse in" << '\n';
-                        Button.handleMouseIn(renderer, e);
-                    }
+                    renderEverything(e);
+
                     person.goHorizontal = false;
                     person.goVertical = false;
 
@@ -260,39 +264,9 @@ int main(int argc, char* args[])
                         {
                             if (Button.mouseIn == true)
                             {
-                                switch (Button.currentButton)
-                                    {
-                                    case restartButton:
-                                    {
-                                        quit = true;
-                                        gameMap.resetMapData();
-                                        break;
-                                    }
-                                    case undoButton:
-                                    {
-                                        break;
-                                    }
-                                    case previousLevelButton:
-                                    {
-                                        quit = true;
-                                        level --;
-                                        if (level < 0)
-                                        {
-                                            level = 0;
-                                        }
-                                        gameMap.resetMapData();
-                                        break;
-                                    }
-                                    case nextLevelButton:
-                                    {
-                                        quit = true;
-                                        level ++;
-                                        gameMap.resetMapData();
-                                        break;
-                                    }
-                                    }
-                                }
+                                Button.handleButton(gameMap, quit, level);
                             }
+                        }
 
                         else if ((e.type == SDL_KEYDOWN && e.key.repeat == 0) &&
                                  (e.key.keysym.sym == SDLK_UP ||
@@ -321,10 +295,10 @@ int main(int argc, char* args[])
                                 SDL_RenderClear(renderer);
 
                                 Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
-                                Score.loadTTFScore (renderer);
+                               // Score.loadTTFScore (renderer);
 
                                 // render while person is running
-                                renderEverything();
+                                renderEverything(e);
 
                                 // update distance
                                 person.distance++;
@@ -340,6 +314,7 @@ int main(int argc, char* args[])
                         {
                             Score.bestSteps = Score.currentSteps;
                         }
+                        direction = 0;
                         quit = true;
                         gameMap.resetMapData();
                         level ++;
