@@ -14,6 +14,7 @@ class Map:public LTexture
 public:
     Map();
     LTexture mapTexture[17][16];
+    LTexture floor, grass, goal;
     string mapDataPreLoad[16];
 
     char mapData[17][16];

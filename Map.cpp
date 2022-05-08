@@ -46,7 +46,8 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
             mapRect[i][j] = {x, y, 50, 50};
             if (mapData[i][j] == ' ')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/floor.png");
+                mapTexture[i][j] = floor;
+                //mapTexture[i][j].loadFromFile(renderer, "images/floor.png");
             }
             if (mapData[i][j] == '#')
             {
@@ -56,31 +57,36 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
             }
             if (mapData[i][j] == '*')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/grass.png");
+                mapTexture[i][j] = grass;
+                //mapTexture[i][j].loadFromFile(renderer, "images/grass.png");
             }
             if (mapData[i][j] == '$')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/floor.png");
+                mapTexture[i][j] = floor;
+                //mapTexture[i][j].loadFromFile(renderer, "images/floor.png");
                 XboxPosition[boxCount] = x;
                 YboxPosition[boxCount] = y;
                 boxCount ++;
             }
             if (mapData[i][j] == '.')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/Goal.png");
+                mapTexture[i][j] = goal;
+                //mapTexture[i][j].loadFromFile(renderer, "images/Goal.png");
                 XgoalPosition[goalCount] = x;
                 YgoalPosition[goalCount] = y;
                 goalCount ++;
             }
             if (mapData[i][j] == '@')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/floor.png");
+                mapTexture[i][j] = floor;
+                //mapTexture[i][j].loadFromFile(renderer, "images/floor.png");
                 XpersonPosition = x;
                 YpersonPosition = y;
             }
             if (mapData[i][j] == '?')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/Goal.png");
+                mapTexture[i][j] = goal;
+                //mapTexture[i][j].loadFromFile(renderer, "images/Goal.png");
 
                 XboxPosition[boxCount] = x;
                 YboxPosition[boxCount] = y;
@@ -92,7 +98,8 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
             }
             if (mapData[i][j] == '+')
             {
-                mapTexture[i][j].loadFromFile(renderer, "images/Goal.png");
+                mapTexture[i][j] = goal;
+                //mapTexture[i][j].loadFromFile(renderer, "images/Goal.png");
                 XpersonPosition = x;
                 YpersonPosition = y;
 

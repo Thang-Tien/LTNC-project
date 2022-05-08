@@ -97,8 +97,11 @@ bool init()
                     cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
                     success = false;
                 }
+                gameMap.grass.loadFromFile (renderer, "images/grass.png");
+                gameMap.floor.loadFromFile (renderer, "images/floor.png");
+                gameMap.goal.loadFromFile (renderer, "images/goal.png");
 
-                Score.scoreFont = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 40 );
+                Score.scoreFont = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 30 );
             }
         }
     }
@@ -134,10 +137,9 @@ bool loadMedia(int level)
 
     // load map data
     gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
+
     Box.loadBoxData (gameMap);
-
     Wall.loadWallData (gameMap);
-
 
     //Open the font
     font = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 50 );
@@ -154,10 +156,11 @@ bool loadMedia(int level)
         cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
         success = false;
     }
+    // load score from file
     Score.loadTTFScore (renderer);
-    //Score.loadBestScore("scores/" + to_string(level) + ".txt");
-    Button.loadButton(renderer);
+    Score.loadBestScore("scores/" + to_string(level) + ".txt");
 
+    Button.loadButton(renderer);
     return success;
 }
 
@@ -282,7 +285,8 @@ int main(int argc, char* args[])
                             person.setVelY (0);
                             person.distance = 0;
                             person.handleEvent ( direction, left, e);
-
+                            person.lastPosX = person.getPosX();
+                            person.lastPosY = person.getPosY();
                             // moving animation
                             while (person.distance < 50)
                             {
@@ -306,8 +310,9 @@ int main(int argc, char* args[])
 
                                 // update distance
                                 person.distance++;
-                                SDL_Delay (3);
+                                SDL_Delay (5);
                             }
+                            if (person.lastPosX != person.getPosX() || person.lastPosY != person.getPosY())
                             Score.currentSteps ++;
                         }
 
@@ -315,10 +320,18 @@ int main(int argc, char* args[])
                     // check if win or not
                     if (Box.winCheck() == true)
                     {
-                        if (Score.currentSteps < Score.bestSteps)
+                        if (Score.bestSteps == 0) Score.bestSteps = Score.currentSteps;
+                        else if (Score.bestSteps != 0 && Score.currentSteps < Score.bestSteps)
                         {
                             Score.bestSteps = Score.currentSteps;
                         }
+
+                        if (Score.bestTime == 0) Score.bestTime = Score.currentTime;
+                        else if (Score.bestTime != 0 && Score.currentTime < Score.bestTime)
+                        {
+                            Score.bestTime = Score.currentTime;
+                        }
+                        Score.saveScore ("scores/" + to_string(level) + ".txt");
                         direction = 0;
                         quit = true;
                         gameMap.resetMapData();

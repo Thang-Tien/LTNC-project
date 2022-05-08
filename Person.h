@@ -9,6 +9,7 @@
 #include <SDL_mixer.h>
 #include "LTexture.h"
 #include "box.h"
+#include "score.h"
 class Person:public LTexture
 {
 public:
@@ -16,10 +17,11 @@ public:
     void handleEvent(int& direction, int& i, SDL_Event& e);
     void moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount, SDL_Rect wallRect[], int& wallCount);
     void renderPerson (SDL_Renderer* renderer, SDL_Rect& currentClip);
-    int distance;
     void setVelX (int x);
     void setVelY (int y);
     bool goHorizontal, goVertical;
+
+    int distance, lastPosX, lastPosY;
 private:
     int velX, velY;
 };
