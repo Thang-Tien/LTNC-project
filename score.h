@@ -20,6 +20,7 @@ public:
     int currentSteps = 0, bestSteps = 0, currentTime = 0, bestTime = 0, startTime;
 
     TTF_Font* scoreFont;
+    SDL_Color textColor;
     LTexture cStep, bStep, cTime, bTime;
 };
 #endif // scoreClass

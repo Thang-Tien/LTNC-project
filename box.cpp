@@ -20,7 +20,7 @@ void box::renderBox (SDL_Renderer* renderer)
             if (goalRect[j].x == boxRect[i].x && goalRect[j].y == boxRect[i].y)
             {
                 scoredGoals[j] = true;
-                boxWinTexture.render(renderer, goalRect[j].x,goalRect[j].y);
+                boxWinTexture.render(renderer, goalRect[j].x, goalRect[j].y);
                 break;
             }
             else

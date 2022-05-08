@@ -11,27 +11,24 @@ using std::to_string;
 const int SCREEN_WIDTH = 850;
 const int SCREEN_HEIGHT = 700;
 
-// khai bao
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
+    SDL_Window* window = NULL;
+    SDL_Renderer* renderer = NULL;
 
-TTF_Font* font = NULL;
-LTexture textTexture;
-SDL_Rect movingPerson[4][2];
-SDL_Rect standingPerson[4];
-int direction = 0;
-Mix_Chunk* boxSlidingSound;
-Mix_Chunk* themeMusic;
+    TTF_Font* font = NULL;
+    LTexture textTexture;
+    SDL_Rect movingPerson[4][2];
+    SDL_Rect standingPerson[4];
+    int direction = 0;
+    Mix_Chunk* boxSlidingSound;
+    Mix_Chunk* themeMusic;
 
-Person person;
-Map gameMap;
-box Box;
-wall Wall;
-score Score;
-button Button;
-SDL_Rect personRect, currentClip;
-
-// khoi tao
+    Person person;
+    Map gameMap;
+    box Box;
+    wall Wall;
+    score Score;
+    button Button;
+    SDL_Rect personRect, currentClip;
 bool init()
 {
     bool success = true;
@@ -82,6 +79,26 @@ bool init()
                     success = false;
                 }
                 Button.setPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+                // load person image
+                if (!person.loadFromFile (renderer, "images/player.png"))
+                {
+                    cout << "Failed to load person texture, Error: " << SDL_GetError() << '\n';
+                    success = false;
+                }
+
+                Box.loadBoxTexture (renderer);
+                Wall.loadWallTexture (renderer);
+
+                // load theme music
+                themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
+                if (themeMusic == NULL)
+                {
+                    cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
+                    success = false;
+                }
+
+                Score.scoreFont = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 40 );
             }
         }
     }
@@ -91,12 +108,8 @@ bool init()
 bool loadMedia(int level)
 {
     bool success = true;
-    // load person image
-    if (!person.loadFromFile (renderer, "images/player.png"))
-    {
-        cout << "Failed to load person texture, Error: " << SDL_GetError() << '\n';
-        success = false;
-    }
+
+
 
     // load moving person
     int y = 0;
@@ -119,20 +132,12 @@ bool loadMedia(int level)
         y += 50;
     }
 
-    // load theme music
-    themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
-    if (themeMusic == NULL)
-    {
-        cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
-        success = false;
-    }
-
     // load map data
     gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
     Box.loadBoxData (gameMap);
-    Box.loadBoxTexture (renderer);
+
     Wall.loadWallData (gameMap);
-    Wall.loadWallTexture (renderer);
+
 
     //Open the font
     font = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 50 );
@@ -149,7 +154,7 @@ bool loadMedia(int level)
         cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
         success = false;
     }
-
+    Score.loadTTFScore (renderer);
     //Score.loadBestScore("scores/" + to_string(level) + ".txt");
     Button.loadButton(renderer);
 
@@ -178,7 +183,6 @@ void close()
 
 void renderEverything(SDL_Event& e)
 {
-    cout << "render" << '\n';
     gameMap.renderMap (renderer);
     Box.renderBox (renderer);
     Wall.renderWall (renderer);
@@ -202,7 +206,7 @@ int main(int argc, char* args[])
     else
     {
         bool quitGame = false, isPlayingMusic = false;
-        int level = 1, x, y;
+        int level = 0;
         while (level <= 107 && !quitGame)
         {
 
@@ -238,12 +242,12 @@ int main(int argc, char* args[])
                 // set start time
                 Score.startTime = SDL_GetTicks();
 
-
                 // game loop
                 while (!quit)
                 {
+
                     Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
-                    //Score.loadTTFScore (renderer);
+                    Score.loadTTFScore (renderer);
                     currentClip = standingPerson [direction];
 
                     // render
@@ -278,6 +282,7 @@ int main(int argc, char* args[])
                             person.setVelY (0);
                             person.distance = 0;
                             person.handleEvent ( direction, left, e);
+
                             // moving animation
                             while (person.distance < 50)
                             {
@@ -295,19 +300,19 @@ int main(int argc, char* args[])
                                 SDL_RenderClear(renderer);
 
                                 Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
-                               // Score.loadTTFScore (renderer);
-
+                                Score.loadTTFScore (renderer);
                                 // render while person is running
                                 renderEverything(e);
 
                                 // update distance
                                 person.distance++;
-                                SDL_Delay (2);
+                                SDL_Delay (3);
                             }
                             Score.currentSteps ++;
                         }
 
                     }
+                    // check if win or not
                     if (Box.winCheck() == true)
                     {
                         if (Score.currentSteps < Score.bestSteps)
@@ -319,7 +324,6 @@ int main(int argc, char* args[])
                         gameMap.resetMapData();
                         level ++;
                     }
-
                 }
             }
         }

@@ -10,6 +10,7 @@ score::score()
     bestSteps = 0;
     bestTime = 0;
     scoreFont = NULL;
+    textColor = { 0, 0, 0 };
 }
 void score::loadBestScore (string path)
 {
@@ -19,8 +20,7 @@ void score::loadBestScore (string path)
 
 void score::loadTTFScore(SDL_Renderer* renderer)
 {
-    scoreFont = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 40 );
-    SDL_Color textColor = { 0, 0, 0 };
+
     if( scoreFont == NULL )
     {
         cout << " Failed to load score scoreFont, Error: " << TTF_GetError() << '\n';

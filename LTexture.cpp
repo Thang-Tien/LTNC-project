@@ -43,7 +43,7 @@ bool LTexture::loadFromFile (SDL_Renderer* renderer, string path)
     return texture != NULL;
 }
 
-bool LTexture::loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font,string textureText, SDL_Color textColor)
+bool LTexture::loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font, string textureText, SDL_Color textColor)
 {
     free();
     SDL_Texture* newTexture = NULL;

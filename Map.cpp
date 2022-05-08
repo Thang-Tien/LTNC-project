@@ -105,10 +105,6 @@ void Map::loadMapData (SDL_Renderer* renderer, string path)
         }
         y += 50;
     }
-    if (mapData[0][0] != '*')
-    {
-        cout << "Failed to load map data" << '\n';
-    }
 
 }
 void Map::resetMapData ()
