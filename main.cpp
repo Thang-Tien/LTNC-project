@@ -111,9 +111,6 @@ bool init()
 bool loadMedia(int level)
 {
     bool success = true;
-
-
-
     // load moving person
     int y = 0;
     for (int i=0; i<4; i++)
@@ -248,7 +245,6 @@ int main(int argc, char* args[])
                 // game loop
                 while (!quit)
                 {
-
                     Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
                     Score.loadTTFScore (renderer);
                     currentClip = standingPerson [direction];
@@ -272,6 +268,12 @@ int main(int argc, char* args[])
                             if (Button.mouseIn == true)
                             {
                                 Button.handleButton(gameMap, quit, level);
+                                if (Button.currentButton == undoButton)
+                                {
+                                    person.setPosX (person.lastPosX [person.lastPosX.size () - Button.last]);
+                                    person.setPosY (person.lastPosY [person.lastPosY.size () - Button.last]);
+                                    Score.currentSteps --;
+                                }
                             }
                         }
 
@@ -285,8 +287,11 @@ int main(int argc, char* args[])
                             person.setVelY (0);
                             person.distance = 0;
                             person.handleEvent ( direction, left, e);
-                            person.lastPosX = person.getPosX();
-                            person.lastPosY = person.getPosY();
+                            person.previousPosX = person.getPosX();
+                            person.previousPosY = person.getPosY();
+                            person.lastPosX.push_back (person.getPosX());
+                            person.lastPosY.push_back (person.getPosY());
+                            Button.last = 0;
                             // moving animation
                             while (person.distance < 50)
                             {
@@ -312,7 +317,7 @@ int main(int argc, char* args[])
                                 person.distance++;
                                 SDL_Delay (5);
                             }
-                            if (person.lastPosX != person.getPosX() || person.lastPosY != person.getPosY())
+                            if (person.previousPosX != person.getPosX() || person.previousPosY != person.getPosY())
                             Score.currentSteps ++;
                         }
 

@@ -10,6 +10,8 @@
 #include <fstream>
 #include "LTexture.h"
 #include "Map.h"
+#include "Person.h"
+#include "box.h"
 enum buttonType
 {
     restartButton,
@@ -39,7 +41,7 @@ class button:public LTexture
         void checkMouseIn ();
 
         bool mouseIn;
-        int currentButton;
+        int currentButton, last = 0;
 		SDL_Rect mouseRect;
 		SDL_Rect buttonRect [totalButton];
 		LTexture buttonTexture[totalButton];

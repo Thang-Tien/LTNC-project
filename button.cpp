@@ -99,6 +99,7 @@ void button::handleButton(Map& gameMap, bool& quit, int& level)
     }
     case undoButton:
     {
+        last ++;
         break;
     }
     case previousLevelButton:

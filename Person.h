@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <vector>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include "LTexture.h"
@@ -21,7 +22,8 @@ public:
     void setVelY (int y);
     bool goHorizontal, goVertical;
 
-    int distance, lastPosX, lastPosY;
+    int distance, previousPosX, previousPosY;
+    std::vector <int> lastPosX, lastPosY;
 private:
     int velX, velY;
 };
