@@ -26,7 +26,14 @@ bool LTexture::loadFromFile (SDL_Renderer* renderer, string path)
     }
     else
     {
-        SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 255, 255, 255));
+        if (path.substr (0, 8) == "buttons/" && path.substr (0, 21) != "buttons/CasualButtons" && path.substr (0, 19) != "buttons/CasualIcons")
+        {
+            SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 0, 0, 0));
+        }
+        else if (path.substr (0, 8) != "buttons/")
+        {
+            SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 255, 255, 255));
+        }
         newTexture = SDL_CreateTextureFromSurface (renderer, loadedSurface);
         if (newTexture == NULL)
         {
@@ -99,13 +106,17 @@ void LTexture::setAlpha (Uint8 alpha)
 //Render
 void LTexture::render(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
-    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
-    if (clip != NULL)
+    if (texture != NULL)
     {
-        renderQuad.w = clip -> w;
-        renderQuad.h = clip -> h;
+        SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+        if (clip != NULL)
+        {
+            renderQuad.w = clip -> w;
+            renderQuad.h = clip -> h;
+        }
+        SDL_RenderCopyEx( renderer, texture, clip, &renderQuad, angle, center, flip );
     }
-    SDL_RenderCopyEx( renderer, texture, clip, &renderQuad, angle, center, flip );
+
 }
 
 bool LTexture::checkCollision(SDL_Rect a, SDL_Rect b)
@@ -178,6 +189,7 @@ void LTexture::setPosY (int y)
 {
     posY = y;
 }
+
 
 
 

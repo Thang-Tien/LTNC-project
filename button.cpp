@@ -1,4 +1,5 @@
 #include "button.h"
+
 button::LButton()
 {
     mouseIn = false;
@@ -6,22 +7,40 @@ button::LButton()
 
 void button::setPosition(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 {
-    int restartButton_Width = 60, undoButton_Width = 60,
-        previousLevelButton_Width =  109,
-        nextLevelButton_Width =  109;
-    buttonRect[restartButton] = {SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 4, 0, restartButton_Width, 60};
-    buttonRect[restartButton_MouseIn] = {SCREEN_WIDTH - restartButton_Width - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 4, 0, restartButton_Width, 60};
-    buttonRect[undoButton] = {SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 3, 0, undoButton_Width, 60};
-    buttonRect[undoButton_MouseIn] = {SCREEN_WIDTH - undoButton_Width - previousLevelButton_Width - nextLevelButton_Width - 3, 0, undoButton_Width, 60};
-    buttonRect[previousLevelButton] = {SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width - 2, 0, previousLevelButton_Width, 60};
-    buttonRect[previousLevelButton_MouseIn] = {SCREEN_WIDTH - previousLevelButton_Width - nextLevelButton_Width - 2, 0, previousLevelButton_Width, 60};
-    buttonRect[nextLevelButton] = {SCREEN_WIDTH - nextLevelButton_Width - 1, 0, nextLevelButton_Width, 60};
-    buttonRect[nextLevelButton_MouseIn] = {SCREEN_WIDTH - nextLevelButton_Width - 1, 0, nextLevelButton_Width, 60};
+    buttonRect[backToMenuButton] = {SCREEN_WIDTH - buttonTexture[restartButton].getWidth() - buttonTexture[undoButton].getWidth() - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - buttonTexture[backToMenuButton].getWidth() - 5,
+    0, buttonTexture[backToMenuButton].getWidth(), buttonTexture[backToMenuButton].getHeight()};
+
+    buttonRect[backToMenuButton_mouseIn] = {SCREEN_WIDTH - buttonTexture[restartButton].getWidth() - buttonTexture[undoButton].getWidth() - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - buttonTexture[backToMenuButton].getWidth() - 5,
+    0, buttonTexture[backToMenuButton].getWidth(), buttonTexture[backToMenuButton].getHeight()};
+
+    buttonRect[restartButton] = {SCREEN_WIDTH - buttonTexture[restartButton].getWidth() - buttonTexture[undoButton].getWidth() - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - 4,
+    0, buttonTexture[restartButton].getWidth (), buttonTexture[restartButton].getHeight()};
+
+    buttonRect[restartButton_MouseIn] = {SCREEN_WIDTH - buttonTexture[restartButton].getWidth() - buttonTexture[undoButton].getWidth() - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - 4,
+    0, buttonTexture[restartButton].getWidth(), buttonTexture[restartButton_MouseIn].getHeight()};
+
+    buttonRect[undoButton] = {SCREEN_WIDTH - buttonTexture[undoButton].getWidth() - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - 3,
+    0, buttonTexture[undoButton].getWidth(), buttonTexture[undoButton].getHeight()};
+
+    buttonRect[undoButton_MouseIn] = {SCREEN_WIDTH - buttonTexture[undoButton].getWidth() - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - 3,
+    0, buttonTexture[undoButton].getWidth(), buttonTexture[undoButton].getHeight()};
+
+    buttonRect[previousLevelButton] = {SCREEN_WIDTH - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - 2,
+    0, buttonTexture[previousLevelButton].getWidth(), buttonTexture[previousLevelButton].getHeight()};
+
+    buttonRect[previousLevelButton_MouseIn] = {SCREEN_WIDTH - buttonTexture[previousLevelButton].getWidth() - buttonTexture[nextLevelButton].getWidth() - 2,
+    0, buttonTexture[previousLevelButton].getWidth(), buttonTexture[previousLevelButton].getHeight()};
+
+    buttonRect[nextLevelButton] = {SCREEN_WIDTH - buttonTexture[nextLevelButton].getWidth() - 1,
+    0, buttonTexture[nextLevelButton].getWidth(), buttonTexture[nextLevelButton].getHeight()};
+
+    buttonRect[nextLevelButton_MouseIn] = {SCREEN_WIDTH - buttonTexture[nextLevelButton].getWidth() - 1,
+    0, buttonTexture[nextLevelButton].getWidth(), buttonTexture[nextLevelButton].getHeight()};
 }
 
 void button::renderButton(SDL_Renderer* renderer)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < totalButton_mouseOut; i++)
     {
         buttonTexture[i].render (renderer, buttonRect[i].x, buttonRect[i].y);
     }
@@ -30,17 +49,20 @@ void button::renderButton(SDL_Renderer* renderer)
 void button::loadButton (SDL_Renderer* renderer)
 {
     // load button image
-    buttonTexture[restartButton].loadFromFile (renderer, "images/restart.png");
-    buttonTexture[restartButton_MouseIn].loadFromFile (renderer, "images/restart_mouse_in.png");
+    buttonTexture[backToMenuButton].loadFromFile (renderer, "buttons/CasualIcons_Locked_006.png");
+    buttonTexture[backToMenuButton_mouseIn].loadFromFile (renderer, "buttons/CasualIcons_006.png");
 
-    buttonTexture[nextLevelButton].loadFromFile (renderer, "images/next_level.png");
-    buttonTexture[nextLevelButton_MouseIn].loadFromFile (renderer, "images/next_level_mouse_in.png");
+    buttonTexture[restartButton].loadFromFile (renderer, "buttons/CasualIcons_Locked_004.png");
+    buttonTexture[restartButton_MouseIn].loadFromFile (renderer, "buttons/CasualIcons_004.png");
 
-    buttonTexture[previousLevelButton].loadFromFile (renderer, "images/previous_level.png");
-    buttonTexture[previousLevelButton_MouseIn].loadFromFile (renderer, "images/previous_level_mouse_in.png");
+    buttonTexture[nextLevelButton].loadFromFile (renderer, "buttons/CasualIcons_Locked_025.png");
+    buttonTexture[nextLevelButton_MouseIn].loadFromFile (renderer, "buttons/CasualIcons_025.png");
 
-    buttonTexture[undoButton].loadFromFile (renderer, "images/undo.png");
-    buttonTexture[undoButton_MouseIn].loadFromFile (renderer, "images/undo_mouse_in.png");
+    buttonTexture[previousLevelButton].loadFromFile (renderer, "buttons/CasualIcons_Locked_026.png");
+    buttonTexture[previousLevelButton_MouseIn].loadFromFile (renderer, "buttons/CasualIcons_026.png");
+
+    buttonTexture[undoButton].loadFromFile (renderer, "buttons/CasualIcons_Locked_023.png");
+    buttonTexture[undoButton_MouseIn].loadFromFile (renderer, "buttons/CasualIcons_023.png");
 }
 void button::checkMouseIn ()
 {
@@ -48,7 +70,7 @@ void button::checkMouseIn ()
     SDL_GetMouseState (&x, &y);
     mouseRect = {x, y, 1, 1};
     mouseIn = false;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < totalButton_mouseOut; i++)
     {
         if (checkCollision (mouseRect, buttonRect[i]) == true)
         {
@@ -64,6 +86,11 @@ void button::handleMouseIn(SDL_Renderer* renderer, SDL_Event& e)
 
     switch (currentButton)
     {
+    case backToMenuButton:
+    {
+        buttonTexture[backToMenuButton_mouseIn].render (renderer, buttonRect[backToMenuButton_mouseIn].x, buttonRect[backToMenuButton_mouseIn].y);
+        break;
+    }
     case restartButton:
     {
         buttonTexture[restartButton_MouseIn].render (renderer, buttonRect[restartButton_MouseIn].x, buttonRect[restartButton_MouseIn].y);
@@ -87,10 +114,17 @@ void button::handleMouseIn(SDL_Renderer* renderer, SDL_Event& e)
     }
 
 }
-void button::handleButton(Map& gameMap, bool& quit, int& level)
+void button::handleButton(Map& gameMap, bool& quit, int& level, menu& Menu)
 {
     switch (currentButton)
     {
+    case backToMenuButton:
+    {
+        quit = true;
+        gameMap.resetMapData();
+        Menu.atMainMenu = true;
+        break;
+    }
     case restartButton:
     {
         quit = true;
@@ -122,4 +156,3 @@ void button::handleButton(Map& gameMap, bool& quit, int& level)
     }
     }
 }
-

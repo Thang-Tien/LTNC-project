@@ -39,10 +39,10 @@
 1650274646 source:d:\code\sokoban\person.cpp
 	"Person.h"
 
-1651931107 source:d:\code\advpro-btl\ltexture.cpp
+1652803399 source:d:\code\advpro-btl\ltexture.cpp
 	"LTexture.h"
 
-1650594690 d:\code\advpro-btl\ltexture.h
+1652839477 d:\code\advpro-btl\ltexture.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -51,7 +51,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1652060504 source:d:\code\advpro-btl\main.cpp
+1652845134 source:d:\code\advpro-btl\main.cpp
 	"Params.h"
 	"LTexture.h"
 	"Person.h"
@@ -60,6 +60,7 @@
 	"wall.h"
 	"button.h"
 	"score.h"
+	"menu.h"
 
 1650200657 d:\code\advpro-btl\params.h
 	<SDL.h>
@@ -70,7 +71,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1652057957 d:\code\advpro-btl\person.h
+1652108010 d:\code\advpro-btl\person.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -83,10 +84,10 @@
 	"box.h"
 	"score.h"
 
-1652021969 source:d:\code\advpro-btl\person.cpp
+1652280137 source:d:\code\advpro-btl\person.cpp
 	"Person.h"
 
-1652009593 source:d:\code\advpro-btl\map.cpp
+1652340275 source:d:\code\advpro-btl\map.cpp
 	"Map.h"
 
 1652009189 d:\code\advpro-btl\map.h
@@ -100,10 +101,10 @@
 	<fstream>
 	"LTexture.h"
 
-1651982884 source:d:\code\advpro-btl\box.cpp
+1652346222 source:d:\code\advpro-btl\box.cpp
 	"box.h"
 
-1651665890 d:\code\advpro-btl\box.h
+1652174588 d:\code\advpro-btl\box.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -115,7 +116,7 @@
 	"Map.h"
 	<algorithm>
 
-1651303380 d:\code\advpro-btl\wall.h
+1652711418 d:\code\advpro-btl\wall.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -127,13 +128,13 @@
 	"LTexture.h"
 	"Map.h"
 
-1651995399 source:d:\code\advpro-btl\wall.cpp
+1652706638 source:d:\code\advpro-btl\wall.cpp
 	"wall.h"
 
-1652060566 source:d:\code\advpro-btl\button.cpp
+1652845192 source:d:\code\advpro-btl\button.cpp
 	"button.h"
 
-1652060835 d:\code\advpro-btl\button.h
+1652845152 d:\code\advpro-btl\button.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -146,6 +147,7 @@
 	"Map.h"
 	"Person.h"
 	"box.h"
+	"menu.h"
 
 1652000842 d:\code\advpro-btl\score.h
 	<SDL.h>
@@ -160,4 +162,18 @@
 
 1652021473 source:d:\code\advpro-btl\score.cpp
 	"score.h"
+
+1652843134 source:d:\code\advpro-btl\menu.cpp
+	"menu.h"
+
+1652807066 d:\code\advpro-btl\menu.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
 

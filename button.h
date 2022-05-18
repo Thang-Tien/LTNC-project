@@ -12,12 +12,16 @@
 #include "Map.h"
 #include "Person.h"
 #include "box.h"
+#include "menu.h"
 enum buttonType
 {
+    backToMenuButton,
     restartButton,
     nextLevelButton,
     previousLevelButton,
     undoButton,
+    totalButton_mouseOut,
+    backToMenuButton_mouseIn = totalButton_mouseOut,
     restartButton_MouseIn,
     nextLevelButton_MouseIn,
     previousLevelButton_MouseIn,
@@ -29,15 +33,19 @@ class button:public LTexture
 	public:
 		//Initializes internal variables
 		LButton();
+
 		//Sets top left position
 		void setPosition(int SCREEN_WIDTH, int SCREEN_HEIGHT);
+
 		//Shows button
 		void renderButton(SDL_Renderer* renderer);
+
         // load button texture
         void loadButton(SDL_Renderer* renderer);
         bool isClicked = false;
+
         void handleMouseIn (SDL_Renderer* renderer, SDL_Event& e);
-        void handleButton (Map& gameMap, bool& quit, int& level);
+        void handleButton (Map& gameMap, bool& quit, int& level, menu& Menu);
         void checkMouseIn ();
 
         bool mouseIn;

@@ -88,3 +88,22 @@ void box::sortBoxByY()
     }
 }
 
+void box::saveLastBoxesPos ()
+{
+    for (int i = 0; i < boxCount; i++)
+    {
+        lastBoxPosX[i][totalLastBox] = boxRect[i].x;
+        lastBoxPosY[i][totalLastBox] = boxRect[i].y;
+    }
+    totalLastBox ++;
+}
+void box::backLastPos (int& last)
+{
+    if (totalLastBox - last < 0) {last = totalLastBox;}
+    for (int i = 0; i < boxCount; i++)
+    {
+        boxRect[i].x = lastBoxPosX[i][totalLastBox - last];
+        boxRect[i].y = lastBoxPosY[i][totalLastBox - last];
+    }
+}
+

@@ -54,7 +54,7 @@ void Person::handleEvent (int& direction, int& left, SDL_Event& e)
 
 }
 
-void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect, SDL_Rect boxRect[], int& boxCount, SDL_Rect wallRect[], int& wallCount)
+void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect, SDL_Rect boxRect[]  , int& boxCount, SDL_Rect wallRect[], int& wallCount)
 {
     posX += velX;
     posY += velY;

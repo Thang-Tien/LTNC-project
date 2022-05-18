@@ -6,29 +6,32 @@
 #include "wall.h"
 #include "button.h"
 #include "score.h"
+#include "menu.h"
 using std::cout;
 using std::to_string;
 const int SCREEN_WIDTH = 850;
 const int SCREEN_HEIGHT = 700;
 
-    SDL_Window* window = NULL;
-    SDL_Renderer* renderer = NULL;
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
 
-    TTF_Font* font = NULL;
-    LTexture textTexture;
-    SDL_Rect movingPerson[4][2];
-    SDL_Rect standingPerson[4];
-    int direction = 0;
-    Mix_Chunk* boxSlidingSound;
-    Mix_Chunk* themeMusic;
+TTF_Font* font = NULL;
+LTexture textTexture;
+LTexture background;
+SDL_Rect movingPerson[4][2];
+SDL_Rect standingPerson[4];
+int direction = 0;
+Mix_Chunk* boxSlidingSound;
+Mix_Chunk* themeMusic;
 
-    Person person;
-    Map gameMap;
-    box Box;
-    wall Wall;
-    score Score;
-    button Button;
-    SDL_Rect personRect, currentClip;
+Person person;
+Map gameMap;
+box Box;
+wall Wall;
+score Score;
+button Button;
+menu Menu;
+SDL_Rect personRect, currentClip;
 bool init()
 {
     bool success = true;
@@ -78,7 +81,6 @@ bool init()
                     cout << "Unable to initialize mixer, Error: " << SDL_GetError() << '\n';
                     success = false;
                 }
-                Button.setPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 
                 // load person image
                 if (!person.loadFromFile (renderer, "images/player.png"))
@@ -97,11 +99,43 @@ bool init()
                     cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
                     success = false;
                 }
+                // load grass, floor and goal texture
                 gameMap.grass.loadFromFile (renderer, "images/grass.png");
                 gameMap.floor.loadFromFile (renderer, "images/floor.png");
                 gameMap.goal.loadFromFile (renderer, "images/goal.png");
 
+                // load ttf font for rendering score
                 Score.scoreFont = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 30 );
+
+                // load menu button
+                Menu.loadMenuButton (renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+                // load button texture
+                Button.loadButton(renderer);
+
+                // set button position
+                Button.setPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+                // load moving person rect
+                int y = 0;
+                for (int i=0; i<4; i++)
+                {
+                    int x = 0;
+                    for (int j=0; j<2; j++)
+                    {
+                        movingPerson[i][j] = {x, y, 50, 50};
+                        x += 100;
+                    }
+                    y += 50;
+                }
+
+                // load standing person
+                y = 0;
+                for (int i=0; i<4; i++)
+                {
+                    standingPerson[i] = {50, y, 50, 50};
+                    y += 50;
+                }
             }
         }
     }
@@ -111,27 +145,8 @@ bool init()
 bool loadMedia(int level)
 {
     bool success = true;
-    // load moving person
-    int y = 0;
-    for (int i=0; i<4; i++)
-    {
-        int x = 0;
-        for (int j=0; j<2; j++)
-        {
-            movingPerson[i][j] = {x, y, 50, 50};
-            x += 100;
-        }
-        y += 50;
-    }
 
-    // load standing person
-    y = 0;
-    for (int i=0; i<4; i++)
-    {
-        standingPerson[i] = {50, y, 50, 50};
-        y += 50;
-    }
-
+    //background.loadFromFile (renderer, "images/volcano.png");
     // load map data
     gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
 
@@ -156,8 +171,6 @@ bool loadMedia(int level)
     // load score from file
     Score.loadTTFScore (renderer);
     Score.loadBestScore("scores/" + to_string(level) + ".txt");
-
-    Button.loadButton(renderer);
     return success;
 }
 
@@ -183,17 +196,24 @@ void close()
 
 void renderEverything(SDL_Event& e)
 {
+    SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+    SDL_RenderClear (renderer);
+    background.render (renderer, 0, 0);
     gameMap.renderMap (renderer);
+
     Box.renderBox (renderer);
     Wall.renderWall (renderer);
     textTexture.render(renderer, 0, 0);
     person.renderPerson(renderer, currentClip);
     Button.renderButton(renderer);
     Button.checkMouseIn();
+
+    // mouse in button animation effect
     if (Button.mouseIn == true)
     {
         Button.handleMouseIn(renderer, e);
     }
+
     Score.renderScore(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_RenderPresent(renderer);
 }
@@ -207,8 +227,19 @@ int main(int argc, char* args[])
     {
         bool quitGame = false, isPlayingMusic = false;
         int level = 0;
-        while (level <= 107 && !quitGame)
+        while (level <= 107)
         {
+
+            SDL_Event menuEvent;
+            // main menu
+            while (Menu.atMainMenu)
+            {
+                Menu.renderMainMenu (renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+                Menu.handleMainMenu (menuEvent, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, quitGame);
+
+                SDL_RenderPresent (renderer);
+            }
+            if (quitGame == true) break;
 
             if (!loadMedia(level))
             {
@@ -216,20 +247,30 @@ int main(int argc, char* args[])
             }
             else
             {
+                // set person's initial position
                 person.setPosX (gameMap.XpersonPosition);
                 person.setPosY (gameMap.YpersonPosition);
+
+                // save person's first posisiton
+                person.lastPosX.push_back (gameMap.XpersonPosition);
+                person.lastPosY.push_back (gameMap.YpersonPosition);
+
+                // save boxes's first position
+                Box.saveLastBoxesPos ();
+
                 Score.currentSteps = 0;
                 direction = 0;
                 Score.currentTime = 0;
+
                 bool quit = false;
                 SDL_Event e;
                 SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                 SDL_RenderClear (renderer);
 
                 // left feet or right feet
-                //          v
+                //         v
                 int      left = 0;
-                // set person initial position
+
                 personRect = {person.getPosX(), person.getPosY(), 50, 50};
 
                 // play theme music
@@ -267,12 +308,25 @@ int main(int argc, char* args[])
                         {
                             if (Button.mouseIn == true)
                             {
-                                Button.handleButton(gameMap, quit, level);
+                                Button.handleButton(gameMap, quit, level, Menu);
                                 if (Button.currentButton == undoButton)
                                 {
+                                    // undo
+                                    if (Button.last > person.lastPosX.size ())
+                                    {
+                                        Button.last  = person.lastPosX.size ();
+                                    }
                                     person.setPosX (person.lastPosX [person.lastPosX.size () - Button.last]);
                                     person.setPosY (person.lastPosY [person.lastPosY.size () - Button.last]);
                                     Score.currentSteps --;
+                                    if (Score.currentSteps < 0) Score.currentSteps = 0;
+                                    Box.backLastPos (Button.last);
+                                }
+                                if (Button.currentButton == restartButton || Button.currentButton == nextLevelButton || Button.currentButton == previousLevelButton)
+                                {
+                                    // clear person position data
+                                    person.lastPosX.clear();
+                                    person.lastPosY.clear();
                                 }
                             }
                         }
@@ -283,15 +337,25 @@ int main(int argc, char* args[])
                                   e.key.keysym.sym == SDLK_LEFT ||
                                   e.key.keysym.sym == SDLK_RIGHT))
                         {
+                            // save boxes's previous position
+                            Box.saveLastBoxesPos ();
+
                             person.setVelX (0);
                             person.setVelY (0);
                             person.distance = 0;
                             person.handleEvent ( direction, left, e);
+
+                            // check if person has moved or not
                             person.previousPosX = person.getPosX();
                             person.previousPosY = person.getPosY();
+
+                            // save person's previous position to vector
                             person.lastPosX.push_back (person.getPosX());
                             person.lastPosY.push_back (person.getPosY());
+
+                            // number of steps we want to undo
                             Button.last = 0;
+
                             // moving animation
                             while (person.distance < 50)
                             {
@@ -318,13 +382,14 @@ int main(int argc, char* args[])
                                 SDL_Delay (5);
                             }
                             if (person.previousPosX != person.getPosX() || person.previousPosY != person.getPosY())
-                            Score.currentSteps ++;
+                                Score.currentSteps ++;
                         }
 
                     }
                     // check if win or not
                     if (Box.winCheck() == true)
                     {
+                        // update best steps
                         if (Score.bestSteps == 0) Score.bestSteps = Score.currentSteps;
                         else if (Score.bestSteps != 0 && Score.currentSteps < Score.bestSteps)
                         {
@@ -332,16 +397,24 @@ int main(int argc, char* args[])
                         }
 
                         if (Score.bestTime == 0) Score.bestTime = Score.currentTime;
+
+                        // update best time
                         else if (Score.bestTime != 0 && Score.currentTime < Score.bestTime)
                         {
                             Score.bestTime = Score.currentTime;
                         }
+                        // reset last box list
+                        Box.totalLastBox = 0;
+
+                        // save score to file
                         Score.saveScore ("scores/" + to_string(level) + ".txt");
+
                         direction = 0;
                         quit = true;
                         gameMap.resetMapData();
                         level ++;
                     }
+                    SDL_Delay (5);
                 }
             }
         }
@@ -349,4 +422,3 @@ int main(int argc, char* args[])
     close();
     return 0;
 }
-

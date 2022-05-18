@@ -21,6 +21,11 @@ public:
     SDL_Rect boxRect[50];
     void clearBoxData ();
 
+    int lastBoxPosX [50][500];
+    int lastBoxPosY [50][500];
+    int totalLastBox = 0;
+    void saveLastBoxesPos ();
+    void backLastPos (int& last);
     int goalCount = 0;
     SDL_Rect goalRect [50];
     bool scoredGoals [50];
