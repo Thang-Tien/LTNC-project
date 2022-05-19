@@ -33,6 +33,7 @@ void score::loadTTFScore(SDL_Renderer* renderer)
     {
         cout << "Failed to load best step texture, Error: " << TTF_GetError() << '\n';
     }
+
     // format current time clock
     string currentTimeClockMin = (currentTime/60 > 9) ? (to_string (currentTime/60)) : ("0" + to_string (currentTime/60)),
            currentTimeClockSec = (currentTime - int(currentTime/60)*60 > 9) ?
@@ -42,6 +43,7 @@ void score::loadTTFScore(SDL_Renderer* renderer)
     {
         cout << "Failed to load current time texture, Error: " << TTF_GetError() << '\n';
     }
+
     // format best time clock
     string bestTimeClockMin = (bestTime/60 > 9) ? (to_string (bestTime/60)) : ("0" + to_string (bestTime/60)),
            bestTimeClockSec = (bestTime - int(bestTime/60)*60 > 9) ?

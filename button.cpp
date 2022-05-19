@@ -123,6 +123,7 @@ void button::handleButton(Map& gameMap, bool& quit, int& level, menu& Menu)
         quit = true;
         gameMap.resetMapData();
         Menu.atMainMenu = true;
+        Menu.mainMenu = true;
         break;
     }
     case restartButton:

@@ -89,9 +89,6 @@ bool init()
                     success = false;
                 }
 
-                Box.loadBoxTexture (renderer);
-                Wall.loadWallTexture (renderer);
-
                 // load theme music
                 themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
                 if (themeMusic == NULL)
@@ -99,13 +96,21 @@ bool init()
                     cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
                     success = false;
                 }
-                // load grass, floor and goal texture
+
+                // load grass, floor, goal, box and wall texture
                 gameMap.grass.loadFromFile (renderer, "images/grass.png");
                 gameMap.floor.loadFromFile (renderer, "images/floor.png");
                 gameMap.goal.loadFromFile (renderer, "images/goal.png");
+                Box.loadBoxTexture (renderer);
+                Wall.loadWallTexture (renderer);
 
                 // load ttf font for rendering score
-                Score.scoreFont = TTF_OpenFont( "AovelSansRounded-rdDL.ttf", 30 );
+                Score.scoreFont = TTF_OpenFont("AovelSansRounded-rdDL.ttf", 30);
+
+                // load ttf font for render level numbers
+                Menu.levelNumFont = TTF_OpenFont ("04B_09__.ttf", 20);
+
+                Menu.loadLevelNum (renderer);
 
                 // load menu button
                 Menu.loadMenuButton (renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -146,7 +151,6 @@ bool loadMedia(int level)
 {
     bool success = true;
 
-    //background.loadFromFile (renderer, "images/volcano.png");
     // load map data
     gameMap.loadMapData (renderer, "levels/" + to_string(level) + ".txt");
 
@@ -227,23 +231,44 @@ int main(int argc, char* args[])
     {
         bool quitGame = false, isPlayingMusic = false;
         int level = 0;
-        while (level <= 107)
+        SDL_Event menuEvent;
+        while (level <= 105)
         {
-
-            SDL_Event menuEvent;
-            // main menu
-            while (Menu.atMainMenu)
+            // play theme music
+            if (!isPlayingMusic)
             {
-                Menu.renderMainMenu (renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-                Menu.handleMainMenu (menuEvent, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, quitGame);
-
-                SDL_RenderPresent (renderer);
+                Mix_PlayChannel (-1, themeMusic, -1);
+                isPlayingMusic = true;
             }
-            if (quitGame == true) break;
+            // main menu
+            while (Menu.mainMenu)
+            {
+                Menu.checkLevelWon ();
+                while (Menu.atMainMenu)
+                {
+                    Menu.renderMainMenu (renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    Menu.handleMainMenu (menuEvent, renderer, quitGame);
+                    SDL_RenderPresent (renderer);
+                }
 
-            if (!loadMedia(level))
+                while (Menu.choosingLevel)
+                {
+                    Menu.mainMenuBackGround.render (renderer, 0, 0);
+                    Menu.backButton.render (renderer, 0, 0);
+
+                    Menu.renderLevelList (renderer);
+                    Menu.handleLevelList (menuEvent, renderer, level);
+
+                    SDL_RenderPresent (renderer);
+                }
+            }
+
+            if (quitGame == true) break;
+            else if (!loadMedia(level))
             {
                 cout << "Failed to load media" << '\n';
+                quitGame = true;
+
             }
             else
             {
@@ -272,13 +297,6 @@ int main(int argc, char* args[])
                 int      left = 0;
 
                 personRect = {person.getPosX(), person.getPosY(), 50, 50};
-
-                // play theme music
-                if (!isPlayingMusic)
-                {
-                    Mix_PlayChannel (-1, themeMusic, -1);
-                    isPlayingMusic = true;
-                }
 
                 // set start time
                 Score.startTime = SDL_GetTicks();

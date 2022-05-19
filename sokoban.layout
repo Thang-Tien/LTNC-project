@@ -2,56 +2,6 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="Map.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="264" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="button.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="654" topLine="21" />
-		</Cursor>
-	</File>
-	<File name="wall.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="377" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7018" topLine="218" />
-		</Cursor>
-	</File>
-	<File name="score.h" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="629" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Person.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="802" topLine="188" />
-		</Cursor>
-	</File>
-	<File name="LTexture.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="987" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="menu.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="958" topLine="11" />
-		</Cursor>
-	</File>
-	<File name="box.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="923" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="score.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="262" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="Person.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="82" topLine="0" />
@@ -62,9 +12,14 @@
 			<Cursor1 position="382" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="box.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="button.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="518" topLine="0" />
+			<Cursor1 position="307" topLine="25" />
+		</Cursor>
+	</File>
+	<File name="score.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1604" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Map.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
@@ -72,19 +27,70 @@
 			<Cursor1 position="432" topLine="89" />
 		</Cursor>
 	</File>
-	<File name="button.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="score.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3400" topLine="18" />
+			<Cursor1 position="629" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="menu.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+	<File name="Map.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1648" topLine="53" />
+			<Cursor1 position="264" topLine="11" />
 		</Cursor>
 	</File>
 	<File name="LTexture.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="988" topLine="17" />
+			<Cursor1 position="1391" topLine="17" />
+		</Cursor>
+	</File>
+	<File name="menu.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5275" topLine="128" />
+		</Cursor>
+	</File>
+	<File name="box.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="518" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="LTexture.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="144" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="box.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="923" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="menu.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1575" topLine="32" />
+		</Cursor>
+	</File>
+	<File name="wall.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="377" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7907" topLine="60" />
+		</Cursor>
+		<Folding>
+			<Collapse line="35" />
+			<Collapse line="150" />
+			<Collapse line="181" />
+			<Collapse line="201" />
+		</Folding>
+	</File>
+	<File name="Person.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="802" topLine="188" />
+		</Cursor>
+	</File>
+	<File name="button.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6168" topLine="106" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

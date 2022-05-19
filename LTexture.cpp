@@ -30,7 +30,11 @@ bool LTexture::loadFromFile (SDL_Renderer* renderer, string path)
         {
             SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 0, 0, 0));
         }
-        else if (path.substr (0, 8) != "buttons/")
+        else if (path == "buttons/CasualIcons_Locked_001.png" || path == "buttons/CasualIcons_001.png")
+        {
+            SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 255, 0, 0));
+        }
+        else if ((path.substr (0, 8) != "buttons/" && path != "images/main_menu.png") || path == "buttons/level_button_outline.png")
         {
             SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 255, 255, 255));
         }
