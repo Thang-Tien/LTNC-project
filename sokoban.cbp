@@ -45,6 +45,8 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="menu.cpp" />
 		<Unit filename="menu.h" />
+		<Unit filename="music.cpp" />
+		<Unit filename="music.h" />
 		<Unit filename="score.cpp" />
 		<Unit filename="score.h" />
 		<Unit filename="wall.cpp" />

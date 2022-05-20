@@ -1,5 +1,6 @@
 #include "menu.h"
 
+// load
 void menu::loadMenuButton (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_HEIGHT)
 {
     mainMenuBackGround.loadFromFile (renderer, "images/main_menu.png");
@@ -10,12 +11,16 @@ void menu::loadMenuButton (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_
     backButton.loadFromFile (renderer, "buttons/CasualIcons_Locked_001.png");
     backButton_mouseIn.loadFromFile (renderer, "buttons/CasualIcons_001.png");
 
+    tutorialTexture.loadFromFile (renderer, "images/tutorial.png");
+
+    creditTexture.loadFromFile (renderer, "images/credit.png");
+
     menuButtonTexture [playButton].loadFromFile (renderer, "buttons/CasualButtons_Locked_001.png");
     menuButtonTexture [playButton_mouseIn].loadFromFile (renderer, "buttons/CasualButtons_001.png");
     menuButtonTexture [levelButton].loadFromFile (renderer, "buttons/levels_mouse_out.png");
     menuButtonTexture [levelButton_mouseIn].loadFromFile (renderer, "buttons/levels_mouse_in.png");
-    menuButtonTexture [tutorialButton].loadFromFile (renderer, "buttons/CasualButtons_Locked_004.png");
-    menuButtonTexture [tutorialButton_mouseIn].loadFromFile (renderer, "buttons/CasualButtons_004.png");
+    menuButtonTexture [tutorialButton].loadFromFile (renderer, "buttons/CasualButtons_Locked_008.png");
+    menuButtonTexture [tutorialButton_mouseIn].loadFromFile (renderer, "buttons/CasualButtons_008.png");
     menuButtonTexture [creditButton].loadFromFile (renderer, "buttons/credits_mouse_out.png");
     menuButtonTexture [creditButton_mouseIn].loadFromFile (renderer, "buttons/credits_mouse_in.png");
     menuButtonTexture [quitButton].loadFromFile (renderer, "buttons/CasualButtons_Locked_009.png");
@@ -44,6 +49,7 @@ void menu::loadLevelNum (SDL_Renderer* renderer)
     }
 }
 
+// handle
 void menu::handleMainMenu (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame)
 {
     checkMouseInMenuButton();
@@ -106,11 +112,13 @@ void menu::handleMainMenu (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame)
                 }
                 case tutorialButton:
                 {
+                    atMainMenu = false;
                     tutorial = true;
                     break;
                 }
                 case creditButton:
                 {
+                    atMainMenu = false;
                     credit = true;
                     break;
                 }
@@ -127,6 +135,112 @@ void menu::handleMainMenu (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame)
     }
 }
 
+void menu::handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bool& quitGame)
+{
+
+    int x, y;
+    SDL_GetMouseState (&x, &y);
+    mouseRect = {x, y, 1, 1};
+    mouseInBackButton = false;
+    if (checkCollision (mouseRect, backButtonRect) == true)
+    {
+        backButton_mouseIn.render (renderer, 0, 0);
+        mouseInBackButton = true;
+    }
+
+    while (SDL_PollEvent (&e) != 0)
+    {
+        if (e.type == SDL_QUIT)
+        {
+            choosingLevel = false;
+            atMainMenu = false;
+            mainMenu = false;
+            quitGame = true;
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (checkCollision (mouseRect, backButtonRect) == true)
+            {
+                choosingLevel = false;
+                atMainMenu = true;
+            }
+            if (mouseInLevelButton == true)
+            {
+                level = currentLevel;
+                choosingLevel = false;
+                atMainMenu = false;
+                mainMenu = false;
+            }
+        }
+    }
+}
+
+void menu::handleTutorial (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame)
+{
+    int x, y;
+    SDL_GetMouseState (&x, &y);
+    mouseRect = {x, y, 1, 1};
+    mouseInBackButton  = false;
+    if (checkCollision (mouseRect, backButtonRect) == true)
+    {
+        backButton_mouseIn.render (renderer, 0, 0);
+        mouseInBackButton = true;
+    }
+
+    while (SDL_PollEvent (&e) != 0)
+    {
+        if (e.type == SDL_QUIT)
+        {
+            tutorial = false;
+            atMainMenu = false;
+            mainMenu = false;
+            quitGame = true;
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (mouseInBackButton == true)
+            {
+                tutorial = false;
+                atMainMenu = true;
+            }
+        }
+    }
+}
+
+void menu::handleCredit (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame)
+{
+    int x, y;
+    SDL_GetMouseState (&x, &y);
+    mouseRect = {x, y, 1, 1};
+    mouseInBackButton  = false;
+    if (checkCollision (mouseRect, backButtonRect) == true)
+    {
+        backButton_mouseIn.render (renderer, 0, 0);
+        mouseInBackButton = true;
+    }
+
+    while (SDL_PollEvent (&e) != 0)
+    {
+        if (e.type == SDL_QUIT)
+        {
+            credit = false;
+            atMainMenu = false;
+            mainMenu = false;
+            quitGame = true;
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (mouseInBackButton == true)
+            {
+                tutorial = false;
+                credit = false;
+                atMainMenu = true;
+            }
+        }
+    }
+}
+
+// check
 void menu::checkMouseInMenuButton ()
 {
     int x, y;
@@ -177,6 +291,7 @@ void menu::checkLevelWon ()
     }
 }
 
+// render
 void menu::renderMainMenu (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_HEIGHT)
 {
     mainMenuBackGround.render (renderer, 0, 0);
@@ -214,43 +329,7 @@ void menu::renderLevelList (SDL_Renderer* renderer)
     }
 }
 
-void menu::handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level)
-{
 
-    int x, y;
-    SDL_GetMouseState (&x, &y);
-    mouseRect = {x, y, 1, 1};
-    if (checkCollision (mouseRect, backButtonRect) == true)
-    {
-        backButton_mouseIn.render (renderer, 0, 0);
-        mouseInBackButton = true;
-    }
-
-    while (SDL_PollEvent (&e) != 0)
-    {
-        if (e.type == SDL_QUIT)
-        {
-            choosingLevel = false;
-            atMainMenu = false;
-            mainMenu = false;
-        }
-        else if (e.type == SDL_MOUSEBUTTONDOWN)
-        {
-            if (checkCollision (mouseRect, backButtonRect) == true)
-            {
-                choosingLevel = false;
-                atMainMenu = true;
-            }
-            if (mouseInLevelButton == true)
-            {
-                level = currentLevel;
-                choosingLevel = false;
-                atMainMenu = false;
-                mainMenu = false;
-            }
-        }
-    }
-}
 
 
 

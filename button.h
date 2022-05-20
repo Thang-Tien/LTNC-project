@@ -15,17 +15,21 @@
 #include "menu.h"
 enum buttonType
 {
+    muteButton,
+    unMuteButton,
     backToMenuButton,
     restartButton,
     nextLevelButton,
     previousLevelButton,
     undoButton,
-    totalButton_mouseOut,
-    backToMenuButton_mouseIn = totalButton_mouseOut,
-    restartButton_MouseIn,
-    nextLevelButton_MouseIn,
-    previousLevelButton_MouseIn,
-    undoButton_MouseIn,
+    totalButton_MouseOut,
+    muteButton_mouseIn = totalButton_MouseOut,
+    unMuteButton_mouseIn,
+    backToMenuButton_mouseIn,
+    restartButton_mouseIn,
+    nextLevelButton_mouseIn,
+    previousLevelButton_mouseIn,
+    undoButton_mouseIn,
     totalButton
 };
 class button:public LTexture

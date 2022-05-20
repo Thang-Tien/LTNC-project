@@ -7,6 +7,7 @@
 #include "button.h"
 #include "score.h"
 #include "menu.h"
+#include "music.h"
 using std::cout;
 using std::to_string;
 const int SCREEN_WIDTH = 850;
@@ -21,8 +22,6 @@ LTexture background;
 SDL_Rect movingPerson[4][2];
 SDL_Rect standingPerson[4];
 int direction = 0;
-Mix_Chunk* boxSlidingSound;
-Mix_Chunk* themeMusic;
 
 Person person;
 Map gameMap;
@@ -31,6 +30,7 @@ wall Wall;
 score Score;
 button Button;
 menu Menu;
+music Music;
 SDL_Rect personRect, currentClip;
 bool init()
 {
@@ -89,13 +89,8 @@ bool init()
                     success = false;
                 }
 
-                // load theme music
-                themeMusic = Mix_LoadWAV ("theme-music(2).mp3");
-                if (themeMusic == NULL)
-                {
-                    cout << "Failed to load theme music, Error: " << SDL_GetError() << '\n';
-                    success = false;
-                }
+                // load music
+                Music.loadMusic ();
 
                 // load grass, floor, goal, box and wall texture
                 gameMap.grass.loadFromFile (renderer, "images/grass.png");
@@ -184,8 +179,8 @@ void close()
     gameMap.free();
     Wall.free();
     Box.free();
-    Mix_FreeChunk (themeMusic);
-    themeMusic = NULL;
+    Mix_FreeMusic (Music.themeMusic);
+    Music.themeMusic = NULL;
 
     SDL_DestroyRenderer (renderer);
     SDL_DestroyWindow (window);
@@ -237,9 +232,10 @@ int main(int argc, char* args[])
             // play theme music
             if (!isPlayingMusic)
             {
-                Mix_PlayChannel (-1, themeMusic, -1);
+                Mix_PlayMusic (Music.themeMusic, -1);
                 isPlayingMusic = true;
             }
+
             // main menu
             while (Menu.mainMenu)
             {
@@ -249,6 +245,7 @@ int main(int argc, char* args[])
                     Menu.renderMainMenu (renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
                     Menu.handleMainMenu (menuEvent, renderer, quitGame);
                     SDL_RenderPresent (renderer);
+                    SDL_Delay(5);
                 }
 
                 while (Menu.choosingLevel)
@@ -257,7 +254,26 @@ int main(int argc, char* args[])
                     Menu.backButton.render (renderer, 0, 0);
 
                     Menu.renderLevelList (renderer);
-                    Menu.handleLevelList (menuEvent, renderer, level);
+                    Menu.handleLevelList (menuEvent, renderer, level, quitGame);
+
+                    SDL_RenderPresent (renderer);
+                    SDL_Delay(5);
+                }
+                while (Menu.tutorial)
+                {
+                    Menu.tutorialTexture.render(renderer, 0, 0);
+                    Menu.backButton.render (renderer, 0, 0);
+
+                    Menu.handleTutorial (menuEvent, renderer, quitGame);
+
+                    SDL_RenderPresent (renderer);
+                }
+                while (Menu.credit)
+                {
+                    Menu.creditTexture.render(renderer, 0, 0);
+                    Menu.backButton.render (renderer, 0, 0);
+
+                    Menu.handleCredit (menuEvent, renderer, quitGame);
 
                     SDL_RenderPresent (renderer);
                 }

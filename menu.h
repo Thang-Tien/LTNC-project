@@ -28,27 +28,35 @@ enum menuButtonType
 class menu:public LTexture
 {
 public:
+    // load texture
     void loadMenuButton (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_HEIGHT);
     void loadLevelNum (SDL_Renderer* renderer);
 
+    // handle
     void handleMainMenu (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame);
+    void handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bool& quitGame);
+    void handleTutorial (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame);
+    void handleCredit (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame);
     void handleMainMenuButton ();
-    void handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level);
 
+    // render
     void renderChoosingLevel ();
     void renderMainMenu (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_HEIGHT);
     void renderLevelList (SDL_Renderer* renderer);
 
+    // check
     void checkMouseInMenuButton ();
     void checkMouseInLevelButton ();
     void checkLevelWon ();
-    bool mainMenu = true, tutorial = false, credit = true, atMainMenu = true, choosingLevel = false,
+
+    bool mainMenu = true, tutorial = false, credit = false, atMainMenu = true, choosingLevel = false,
          mouseInMenuButton = false, mouseInLevelButton = false, mouseInBackButton = false;
     bool levelWon [105];
 
     int currentMenuButton, currentLevel;
 
-    LTexture mainMenuBackGround;
+    LTexture mainMenuBackGround, tutorialTexture, creditTexture;
+
     LTexture levelNumButton, levelNumButtonWon, levelNumButtonOutline;
     LTexture backButton, backButton_mouseIn;
     LTexture menuButtonTexture[totalMenuButton_mouseIn];
