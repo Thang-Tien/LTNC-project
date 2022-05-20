@@ -8,6 +8,7 @@
 #include "score.h"
 #include "menu.h"
 #include "music.h"
+#include "smallMap.h"
 using std::cout;
 using std::to_string;
 const int SCREEN_WIDTH = 850;
@@ -31,6 +32,7 @@ score Score;
 button Button;
 menu Menu;
 music Music;
+smallMap preViewMap;
 SDL_Rect personRect, currentClip;
 bool init()
 {
@@ -99,6 +101,15 @@ bool init()
                 Box.loadBoxTexture (renderer);
                 Wall.loadWallTexture (renderer);
 
+                // load grass, floor, goal, box and wall texture to preview map
+                preViewMap.grass.loadFromFile (renderer, "images/small_grass.png");
+                preViewMap.floor.loadFromFile (renderer, "images/small_floor.png");
+                preViewMap.goal.loadFromFile (renderer, "images/small_goal.png");
+                preViewMap.wall.loadFromFile (renderer, "images/small_wall.png");
+                preViewMap.box.loadFromFile (renderer, "images/small_box.png");
+                preViewMap.boxOnGoal.loadFromFile (renderer, "images/small_box_win.png");
+                preViewMap.person.loadFromFile (renderer, "images/small_player.png");
+
                 // load ttf font for rendering score
                 Score.scoreFont = TTF_OpenFont("AovelSansRounded-rdDL.ttf", 30);
 
@@ -136,6 +147,7 @@ bool init()
                     standingPerson[i] = {50, y, 50, 50};
                     y += 50;
                 }
+
             }
         }
     }
@@ -167,6 +179,7 @@ bool loadMedia(int level)
         cout << "Failed to load text texture, Error: " << TTF_GetError() << '\n';
         success = false;
     }
+
     // load score from file
     Score.loadTTFScore (renderer);
     Score.loadBestScore("scores/" + to_string(level) + ".txt");
@@ -253,7 +266,7 @@ int main(int argc, char* args[])
                     Menu.mainMenuBackGround.render (renderer, 0, 0);
                     Menu.backButton.render (renderer, 0, 0);
 
-                    Menu.renderLevelList (renderer);
+                    Menu.renderLevelList (renderer, preViewMap, level);
                     Menu.handleLevelList (menuEvent, renderer, level, quitGame);
 
                     SDL_RenderPresent (renderer);
@@ -267,6 +280,7 @@ int main(int argc, char* args[])
                     Menu.handleTutorial (menuEvent, renderer, quitGame);
 
                     SDL_RenderPresent (renderer);
+                    SDL_Delay(5);
                 }
                 while (Menu.credit)
                 {
@@ -276,6 +290,7 @@ int main(int argc, char* args[])
                     Menu.handleCredit (menuEvent, renderer, quitGame);
 
                     SDL_RenderPresent (renderer);
+                    SDL_Delay(5);
                 }
             }
 

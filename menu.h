@@ -9,6 +9,7 @@
 #include <SDL_mixer.h>
 #include <fstream>
 #include "LTexture.h"
+#include "smallMap.h"
 enum menuButtonType
 {
     playButton,
@@ -42,7 +43,7 @@ public:
     // render
     void renderChoosingLevel ();
     void renderMainMenu (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_HEIGHT);
-    void renderLevelList (SDL_Renderer* renderer);
+    void renderLevelList (SDL_Renderer* renderer, smallMap& preViewMap, int& level);
 
     // check
     void checkMouseInMenuButton ();

@@ -49,6 +49,8 @@
 		<Unit filename="music.h" />
 		<Unit filename="score.cpp" />
 		<Unit filename="score.h" />
+		<Unit filename="smallMap.cpp" />
+		<Unit filename="smallMap.h" />
 		<Unit filename="wall.cpp" />
 		<Unit filename="wall.h" />
 		<Extensions>

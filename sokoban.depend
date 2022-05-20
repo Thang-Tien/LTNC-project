@@ -39,7 +39,7 @@
 1650274646 source:d:\code\sokoban\person.cpp
 	"Person.h"
 
-1653058294 source:d:\code\advpro-btl\ltexture.cpp
+1653071680 source:d:\code\advpro-btl\ltexture.cpp
 	"LTexture.h"
 
 1652839477 d:\code\advpro-btl\ltexture.h
@@ -51,7 +51,7 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1653061975 source:d:\code\advpro-btl\main.cpp
+1653071651 source:d:\code\advpro-btl\main.cpp
 	"Params.h"
 	"LTexture.h"
 	"Person.h"
@@ -62,6 +62,7 @@
 	"score.h"
 	"menu.h"
 	"music.h"
+	"smallMap.h"
 
 1650200657 d:\code\advpro-btl\params.h
 	<SDL.h>
@@ -88,10 +89,10 @@
 1652280137 source:d:\code\advpro-btl\person.cpp
 	"Person.h"
 
-1652340275 source:d:\code\advpro-btl\map.cpp
+1653069292 source:d:\code\advpro-btl\map.cpp
 	"Map.h"
 
-1652009189 d:\code\advpro-btl\map.h
+1653069292 d:\code\advpro-btl\map.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -164,10 +165,10 @@
 1652891245 source:d:\code\advpro-btl\score.cpp
 	"score.h"
 
-1653061781 source:d:\code\advpro-btl\menu.cpp
+1653071222 source:d:\code\advpro-btl\menu.cpp
 	"menu.h"
 
-1653063997 d:\code\advpro-btl\menu.h
+1653069292 d:\code\advpro-btl\menu.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
@@ -177,6 +178,7 @@
 	<SDL_mixer.h>
 	<fstream>
 	"LTexture.h"
+	"smallMap.h"
 
 1653018758 source:d:\code\advpro-btl\music.cpp
 	"music.h"
@@ -184,5 +186,19 @@
 1653018759 d:\code\advpro-btl\music.h
 	<SDL_mixer.h>
 	<iostream>
+	"LTexture.h"
+
+1653072272 source:d:\code\advpro-btl\smallmap.cpp
+	"smallMap.h"
+
+1653070868 d:\code\advpro-btl\smallmap.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
 	"LTexture.h"
 

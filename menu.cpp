@@ -303,25 +303,35 @@ void menu::renderMainMenu (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_
     }
 }
 
-void menu::renderLevelList (SDL_Renderer* renderer)
+void menu::renderLevelList (SDL_Renderer* renderer, smallMap& preViewMap, int& level)
 {
     int x = 15, y = 310, levelNum = 0;
     checkMouseInLevelButton ();
     if (mouseInLevelButton == true)
     {
+        // render preview map
+        preViewMap.loadsmallMapData (renderer, "levels/" + std::to_string (currentLevel) + ".txt");
+        preViewMap.rendersmallMap (renderer);
+
+        // render level out line
         levelNumButtonOutline.render (renderer, levelRect[currentLevel - 1].x - (levelNumButtonOutline.getWidth() - levelRect[currentLevel - 1].w)/2,
                                                 levelRect[currentLevel - 1].y - (levelNumButtonOutline.getHeight() - levelRect[currentLevel - 1].h)/2);
     }
+
     for (int i = 0; i < 7; i++)
     {
         x = 15;
         for (int j = 0; j < 15; j++)
         {
+            // render won level in green
             if (levelWon[levelNum] == false) levelNumButton.render (renderer, x, y);
             else levelNumButtonWon.render (renderer, x, y);
+
+            // render level number
             levelNumText[levelNum].render (renderer, x + levelNumButton.getWidth()/2 - levelNumText[levelNum].getWidth()/2,
                                                      y + levelNumButton.getHeight()/2 - levelNumText[levelNum].getHeight()/2);
             levelRect[levelNum] = {x, y, levelNumButton.getWidth(), levelNumButton.getHeight()};
+
             levelNum ++;
             x += 55;
         }

@@ -35,7 +35,7 @@ bool LTexture::loadFromFile (SDL_Renderer* renderer, string path)
         {
             SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 255, 0, 0));
         }
-        else if ((path.substr (0, 8) != "buttons/" && path != "images/main_menu.png") || path == "buttons/level_button_outline.png")
+        else if ((path.substr (0, 8) != "buttons/" && path != "images/main_menu.png") || path == "buttons/level_button_outline.png" || path == "images/small_player.png")
         {
             SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 255, 255, 255));
         }
