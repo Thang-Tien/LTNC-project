@@ -23,7 +23,7 @@ public:
     bool goHorizontal, goVertical;
 
     int distance, previousPosX, previousPosY;
-    std::vector <int> lastPosX, lastPosY;
+    std::vector <int> lastPosX, lastPosY, previousDirection;
 private:
     int velX, velY;
 };

@@ -1,4 +1,3 @@
-#include "Params.h"
 #include "LTexture.h"
 #include "Person.h"
 #include "Map.h"
@@ -247,6 +246,8 @@ int main(int argc, char* args[])
         bool quitGame = false, isPlayingMusic = false;
         int level = 1;
         SDL_Event menuEvent;
+
+        // game loop
         while (level <= 105)
         {
             // play theme music
@@ -321,12 +322,17 @@ int main(int argc, char* args[])
                 // save boxes's first position
                 Box.saveLastBoxesPos ();
 
+                // initial
+                Score.currentTime = 0;
                 Score.currentSteps = 0;
                 direction = 0;
-                Score.currentTime = 0;
 
+                // save person's first direction
+                person.previousDirection.push_back (direction);
                 bool quit = false;
                 SDL_Event e;
+
+                // clear existed screen
                 SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                 SDL_RenderClear (renderer);
 
@@ -339,7 +345,7 @@ int main(int argc, char* args[])
                 // set start time
                 Score.startTime = SDL_GetTicks();
 
-                // game loop
+                // level loop
                 while (!quit)
                 {
                     Score.currentTime = (SDL_GetTicks() - Score.startTime)/1000;
@@ -375,6 +381,8 @@ int main(int argc, char* args[])
                                     person.setPosX (person.lastPosX [person.lastPosX.size () - Button.last]);
                                     person.setPosY (person.lastPosY [person.lastPosY.size () - Button.last]);
 
+                                    // set person direction to previous direction
+                                    direction = person.previousDirection [person.previousDirection.size() - Button.last];
                                     Score.currentSteps --;
 
                                     if (Score.currentSteps < 0) Score.currentSteps = 0;
@@ -410,6 +418,8 @@ int main(int argc, char* args[])
                             // save person's previous position to the vector
                             person.lastPosX.push_back (person.getPosX());
                             person.lastPosY.push_back (person.getPosY());
+                            // save person previous direction
+                            person.previousDirection.push_back (direction);
 
                             // number of steps we want to undo
                             Button.last = 0;
