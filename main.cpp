@@ -20,6 +20,7 @@ SDL_Renderer* renderer = NULL;
 TTF_Font* font = NULL;
 LTexture textTexture;
 LTexture background;
+LTexture winTexture;
 SDL_Rect movingPerson[4][2];
 SDL_Rect standingPerson[4];
 int direction = 0;
@@ -109,6 +110,11 @@ bool init()
                 preViewMap.box.loadFromFile (renderer, "images/small_box.png");
                 preViewMap.boxOnGoal.loadFromFile (renderer, "images/small_box_win.png");
                 preViewMap.person.loadFromFile (renderer, "images/small_player.png");
+
+                // load win texture
+                winTexture.loadFromFile (renderer, "images/win.png");
+                //set blend mode for win texture
+                winTexture.setBlendMode (SDL_BLENDMODE_BLEND);
 
                 // load ttf font for rendering score
                 Score.scoreFont = TTF_OpenFont("AovelSansRounded-rdDL.ttf", 30);
@@ -238,7 +244,7 @@ int main(int argc, char* args[])
     else
     {
         bool quitGame = false, isPlayingMusic = false;
-        int level = 0;
+        int level = 1;
         SDL_Event menuEvent;
         while (level <= 105)
         {
@@ -295,11 +301,11 @@ int main(int argc, char* args[])
             }
 
             if (quitGame == true) break;
+
             else if (!loadMedia(level))
             {
                 cout << "Failed to load media" << '\n';
                 quitGame = true;
-
             }
             else
             {
@@ -349,8 +355,7 @@ int main(int argc, char* args[])
                     {
                         if (e.type == SDL_QUIT)
                         {
-                            quit = true;
-                            quitGame = true;
+                            return 0;
                         }
                         // check if mouse is in the button
                         else if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -365,9 +370,12 @@ int main(int argc, char* args[])
                                     {
                                         Button.last  = person.lastPosX.size ();
                                     }
+                                    // set person position to previous position
                                     person.setPosX (person.lastPosX [person.lastPosX.size () - Button.last]);
                                     person.setPosY (person.lastPosY [person.lastPosY.size () - Button.last]);
+
                                     Score.currentSteps --;
+
                                     if (Score.currentSteps < 0) Score.currentSteps = 0;
                                     Box.backLastPos (Button.last);
                                 }
@@ -398,7 +406,7 @@ int main(int argc, char* args[])
                             person.previousPosX = person.getPosX();
                             person.previousPosY = person.getPosY();
 
-                            // save person's previous position to vector
+                            // save person's previous position to the vector
                             person.lastPosX.push_back (person.getPosX());
                             person.lastPosY.push_back (person.getPosY());
 
@@ -435,9 +443,13 @@ int main(int argc, char* args[])
                         }
 
                     }
-                    // check if win or not
+                    // handle win state
                     if (Box.winCheck() == true)
                     {
+
+                        // play sound effect
+                        Mix_PlayChannel (1, Music.dingSoundEffect, 0);
+
                         // update best steps
                         if (Score.bestSteps == 0) Score.bestSteps = Score.currentSteps;
                         else if (Score.bestSteps != 0 && Score.currentSteps < Score.bestSteps)
@@ -452,11 +464,38 @@ int main(int argc, char* args[])
                         {
                             Score.bestTime = Score.currentTime;
                         }
-                        // reset last box list
-                        Box.totalLastBox = 0;
 
                         // save score to file
                         Score.saveScore ("scores/" + to_string(level) + ".txt");
+
+                        // blend win texture and handle event
+                        Uint8 a = 0;
+                        bool isRenderingWinTexture = true;
+                        while (isRenderingWinTexture)
+                        {
+                            winTexture.setAlpha (a);
+                            winTexture.render (renderer, 0, 0);
+
+                            Score.cStep.render (renderer, SCREEN_WIDTH/2 - Score.cStep.getWidth()/2, SCREEN_HEIGHT/2);
+                            Score.cTime.render (renderer, SCREEN_WIDTH/2 - Score.cTime.getWidth()/2, SCREEN_HEIGHT/2 + 50);
+                            Score.bStep.render (renderer, SCREEN_WIDTH/2 - Score.bStep.getWidth()/2, SCREEN_HEIGHT/2 + 100);
+                            Score.bTime.render (renderer, SCREEN_WIDTH/2 - Score.bTime.getWidth()/2, SCREEN_HEIGHT/2 + 150);
+
+                            SDL_RenderPresent (renderer);
+                            while (SDL_PollEvent (&e) != 0)
+                            {
+                                if (e.type == SDL_QUIT) return 0;
+                                if (e.type == SDL_KEYDOWN || e.type == SDL_MOUSEBUTTONDOWN)
+                                {
+                                    isRenderingWinTexture = false;
+                                }
+                            }
+                            a += 5;
+                            SDL_Delay (5);
+                        }
+
+                        // reset last box list
+                        Box.totalLastBox = 0;
 
                         direction = 0;
                         quit = true;

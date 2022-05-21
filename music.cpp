@@ -7,4 +7,10 @@ void music::loadMusic()
     {
         std::cout << "Failed to load theme music, Error: " << Mix_GetError() << '\n';
     }
+
+    dingSoundEffect = Mix_LoadWAV ("music/ding-sound-effect.mp3");
+    if (dingSoundEffect == NULL)
+    {
+        std::cout << "Failed to load ding sound effect, Error: " << Mix_GetError() << '\n';
+    }
 }

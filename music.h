@@ -10,5 +10,6 @@ public:
     void loadMusic ();
 
     Mix_Music* themeMusic;
+    Mix_Chunk* dingSoundEffect;
 };
 #endif // musicClass

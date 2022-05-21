@@ -10,23 +10,23 @@ smallMap::smallMap()
 }
 void smallMap::rendersmallMap(SDL_Renderer* renderer)
 {
-    int x = 561, y = 0;
+    int x = 510, y = 0;
     for (int j = 0; j < 14; j++)
     {
-        x = 561;
+        x = 510;
         for (int i = 0; i < 17; i++)
         {
             smallMapTexture[i][j].render(renderer, x, y);
-            x += 17;
+            x += 20;
         }
-        y += 17;
+        y += 20;
     }
     person.render (renderer, XpersonPosition, YpersonPosition);
 }
 void smallMap::loadsmallMapData (SDL_Renderer* renderer, string path)
 {
     ifstream fi (path.c_str());
-    int x = 561, y = 0, i = 0, j = 0;
+    int x = 510, y = 0, i = 0, j = 0;
     for (i = 0; i < 14; i++)
     {
          getline(fi, smallMapDataPreLoad[i]);
@@ -41,7 +41,7 @@ void smallMap::loadsmallMapData (SDL_Renderer* renderer, string path)
     }
     for (j = 0; j < 14; j++)
     {
-        x = 561;
+        x = 510;
         for (i = 0; i < 17; i++)
         {
             if (smallMapData[i][j] == ' ')
@@ -80,9 +80,9 @@ void smallMap::loadsmallMapData (SDL_Renderer* renderer, string path)
                 YpersonPosition = y;
                 smallMapTexture[i][j] = goal;
             }
-            x += 17;
+            x += 20;
         }
-        y += 17;
+        y += 20;
     }
 
 }

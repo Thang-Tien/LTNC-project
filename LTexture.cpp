@@ -26,7 +26,7 @@ bool LTexture::loadFromFile (SDL_Renderer* renderer, string path)
     }
     else
     {
-        if (path != "images/tutorial.png")
+        if (path != "images/tutorial.png" && path != "images/win.png" && path != "images/credit.png")
         if (path.substr (0, 8) == "buttons/" && path.substr (0, 21) != "buttons/CasualButtons" && path.substr (0, 19) != "buttons/CasualIcons")
         {
             SDL_SetColorKey (loadedSurface, SDL_TRUE, SDL_MapRGB (loadedSurface -> format, 0, 0, 0));
