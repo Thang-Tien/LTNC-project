@@ -10,10 +10,16 @@ void menu::loadMenuButton (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_
 
     backButton.loadFromFile (renderer, "buttons/CasualIcons_Locked_001.png");
     backButton_mouseIn.loadFromFile (renderer, "buttons/CasualIcons_001.png");
+    deleteButton.loadFromFile (renderer, "buttons/CasualIcons_Locked_035.png");
+    deleteButton_mouseIn.loadFromFile (renderer, "buttons/CasualIcons_035.png");
+    yesButton.loadFromFile (renderer, "buttons/CasualButtons_Locked_006.png");
+    yesButton_mouseIn.loadFromFile (renderer, "buttons/CasualButtons_006.png");
+    noButton.loadFromFile (renderer, "buttons/CasualButtons_Locked_010.png");
+    noButton_mouseIn.loadFromFile (renderer, "buttons/CasualButtons_010.png");
 
     tutorialTexture.loadFromFile (renderer, "images/tutorial.png");
-
     creditTexture.loadFromFile (renderer, "images/credit.png");
+    warningTexture.loadFromFile (renderer, "images/warning.png");
 
     menuButtonTexture [playButton].loadFromFile (renderer, "buttons/CasualButtons_Locked_001.png");
     menuButtonTexture [playButton_mouseIn].loadFromFile (renderer, "buttons/CasualButtons_001.png");
@@ -33,7 +39,12 @@ void menu::loadMenuButton (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_
         menuButtonPosY += menuButtonTexture[i].getHeight() + 10;
     }
 
+    warningTextureRect = {SCREEN_WIDTH/2 - warningTexture.getWidth()/2, SCREEN_HEIGHT/2 - warningTexture.getHeight()/2, warningTexture.getWidth(), warningTexture.getHeight()};
     backButtonRect = {0, 0, backButton.getWidth(), backButton.getHeight()};
+    deleteButtonRect = {SCREEN_WIDTH - deleteButton.getWidth(), 0, deleteButton.getWidth(), deleteButton.getHeight()};
+    yesButtonRect = {225 + (200 - yesButton.getWidth ())/2, 350 + (100 - yesButton.getHeight())/2, yesButton.getWidth (), yesButton.getHeight()};
+    noButtonRect = {425 + (200 - noButton.getWidth ())/2, 350 + (100 - noButton.getHeight())/2, noButton.getWidth (), noButton.getHeight()};
+
 }
 
 void menu::loadLevelNum (SDL_Renderer* renderer)
@@ -135,7 +146,7 @@ void menu::handleMainMenu (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame)
     }
 }
 
-void menu::handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bool& quitGame)
+void menu::handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bool& quitGame, smallMap& preViewMap)
 {
 
     int x, y;
@@ -147,7 +158,10 @@ void menu::handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bo
         backButton_mouseIn.render (renderer, 0, 0);
         mouseInBackButton = true;
     }
-
+    if (checkCollision (mouseRect, deleteButtonRect) == true)
+    {
+        deleteButton_mouseIn.render (renderer, deleteButtonRect.x, deleteButtonRect.y);
+    }
     while (SDL_PollEvent (&e) != 0)
     {
         if (e.type == SDL_QUIT)
@@ -159,17 +173,73 @@ void menu::handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bo
         }
         else if (e.type == SDL_MOUSEBUTTONDOWN)
         {
+            haveJustBeenConfirming = false;
             if (checkCollision (mouseRect, backButtonRect) == true)
             {
                 choosingLevel = false;
                 atMainMenu = true;
             }
-            if (mouseInLevelButton == true)
+            if (checkCollision (mouseRect, deleteButtonRect) == true)
+            {
+                haveJustBeenConfirming = true;
+                confirming = true;
+                while (confirming)
+                {
+                    warningTexture.render (renderer, warningTextureRect.x, warningTextureRect.y);
+                    yesButton.render (renderer, yesButtonRect.x, yesButtonRect.y);
+                    noButton.render (renderer, noButtonRect.x, noButtonRect.y);
+
+                    handleConfirming (e, renderer, quitGame, preViewMap, level);
+                    SDL_RenderPresent (renderer);
+                }
+            }
+            if (mouseInLevelButton == true && haveJustBeenConfirming == false)
             {
                 level = currentLevel;
                 choosingLevel = false;
                 atMainMenu = false;
                 mainMenu = false;
+            }
+        }
+    }
+}
+
+void menu::handleConfirming (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame, smallMap& preViewMap, int& level)
+{
+    int x, y;
+    SDL_GetMouseState (&x, &y);
+    mouseRect = {x, y, 1, 1};
+    mouseInYesButton = false;
+    mouseInNoButton = false;
+    if (checkCollision(mouseRect, yesButtonRect) == true)
+    {
+        yesButton_mouseIn.render (renderer, yesButtonRect.x, yesButtonRect.y);
+        mouseInYesButton = true;
+    }
+    if (checkCollision(mouseRect, noButtonRect) == true)
+    {
+        noButton_mouseIn.render (renderer, noButtonRect.x, noButtonRect.y);
+        mouseInNoButton = true;
+    }
+    while (SDL_PollEvent (&e) != 0)
+    {
+        if (e.type == SDL_QUIT)
+        {
+            confirming = false;
+            quitGame = false;
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (mouseInYesButton == true)
+            {
+                deleteScore ();
+                checkLevelWon ();
+                renderLevelList (renderer, preViewMap, level);
+                confirming = false;
+            }
+            else if (mouseInNoButton == true)
+            {
+                confirming = false;
             }
         }
     }
@@ -337,6 +407,16 @@ void menu::renderLevelList (SDL_Renderer* renderer, smallMap& preViewMap, int& l
         }
         y += 55;
     }
+}
+
+void menu::deleteScore ()
+{
+    for (int i = 1; i <= 105; i++)
+    {
+        std::ofstream fo ("scores/" + std::to_string(i) + ".txt");
+        fo << 0 << " " << 0;
+    }
+
 }
 
 

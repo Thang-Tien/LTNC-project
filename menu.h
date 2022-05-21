@@ -35,7 +35,8 @@ public:
 
     // handle
     void handleMainMenu (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame);
-    void handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bool& quitGame);
+    void handleLevelList (SDL_Event& e, SDL_Renderer* renderer, int& level, bool& quitGame, smallMap& preViewMap);
+    void handleConfirming (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame, smallMap& preViewMap, int& level);
     void handleTutorial (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame);
     void handleCredit (SDL_Event& e, SDL_Renderer* renderer, bool& quitGame);
     void handleMainMenuButton ();
@@ -50,16 +51,18 @@ public:
     void checkMouseInLevelButton ();
     void checkLevelWon ();
 
+    // delete score
+    void deleteScore ();
     bool mainMenu = true, tutorial = false, credit = false, atMainMenu = true, choosingLevel = false,
-         mouseInMenuButton = false, mouseInLevelButton = false, mouseInBackButton = false;
-    bool levelWon [105];
+         mouseInMenuButton = false, mouseInLevelButton = false, mouseInBackButton = false, mouseInYesButton = false, mouseInNoButton = false;
+    bool levelWon [105], confirming = true, haveJustBeenConfirming = false;
 
     int currentMenuButton, currentLevel;
 
-    LTexture mainMenuBackGround, tutorialTexture, creditTexture;
+    LTexture mainMenuBackGround, tutorialTexture, creditTexture, warningTexture;
 
     LTexture levelNumButton, levelNumButtonWon, levelNumButtonOutline;
-    LTexture backButton, backButton_mouseIn;
+    LTexture backButton, backButton_mouseIn, deleteButton, deleteButton_mouseIn, yesButton, yesButton_mouseIn, noButton, noButton_mouseIn;
     LTexture menuButtonTexture[totalMenuButton_mouseIn];
     LTexture levelNumText [105];
     TTF_Font* levelNumFont = NULL;
@@ -68,7 +71,8 @@ public:
     SDL_Rect levelRect [105];
     SDL_Rect menuButtonRect [totalMenuButton];
     SDL_Rect mouseRect;
-    SDL_Rect backButtonRect;
+    SDL_Rect backButtonRect, deleteButtonRect, yesButtonRect, noButtonRect;
+    SDL_Rect warningTextureRect;
 };
 
 #endif // menuClass

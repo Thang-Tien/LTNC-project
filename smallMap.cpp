@@ -10,10 +10,10 @@ smallMap::smallMap()
 }
 void smallMap::rendersmallMap(SDL_Renderer* renderer)
 {
-    int x = 510, y = 0;
+    int x = 255 , y = 0;
     for (int j = 0; j < 14; j++)
     {
-        x = 510;
+        x = 255;
         for (int i = 0; i < 17; i++)
         {
             smallMapTexture[i][j].render(renderer, x, y);
@@ -26,7 +26,7 @@ void smallMap::rendersmallMap(SDL_Renderer* renderer)
 void smallMap::loadsmallMapData (SDL_Renderer* renderer, string path)
 {
     ifstream fi (path.c_str());
-    int x = 510, y = 0, i = 0, j = 0;
+    int x = 255, y = 0, i = 0, j = 0;
     for (i = 0; i < 14; i++)
     {
          getline(fi, smallMapDataPreLoad[i]);
@@ -41,7 +41,7 @@ void smallMap::loadsmallMapData (SDL_Renderer* renderer, string path)
     }
     for (j = 0; j < 14; j++)
     {
-        x = 510;
+        x = 255;
         for (i = 0; i < 17; i++)
         {
             if (smallMapData[i][j] == ' ')

@@ -34,6 +34,7 @@ menu Menu;
 music Music;
 smallMap preViewMap;
 SDL_Rect personRect, currentClip;
+
 bool init()
 {
     bool success = true;
@@ -273,9 +274,10 @@ int main(int argc, char* args[])
                 {
                     Menu.mainMenuBackGround.render (renderer, 0, 0);
                     Menu.backButton.render (renderer, 0, 0);
+                    Menu.deleteButton.render (renderer, SCREEN_WIDTH - Menu.deleteButton.getWidth(), 0);
 
                     Menu.renderLevelList (renderer, preViewMap, level);
-                    Menu.handleLevelList (menuEvent, renderer, level, quitGame);
+                    Menu.handleLevelList (menuEvent, renderer, level, quitGame, preViewMap);
 
                     SDL_RenderPresent (renderer);
                     SDL_Delay(5);
@@ -329,6 +331,7 @@ int main(int argc, char* args[])
 
                 // save person's first direction
                 person.previousDirection.push_back (direction);
+
                 bool quit = false;
                 SDL_Event e;
 
