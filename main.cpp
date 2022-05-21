@@ -18,7 +18,7 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
 TTF_Font* font = NULL;
-LTexture textTexture;
+LTexture textTexture, winText;
 LTexture background;
 LTexture winTexture;
 SDL_Rect movingPerson[4][2];
@@ -122,6 +122,7 @@ bool init()
                 // load ttf font for render level numbers
                 Menu.levelNumFont = TTF_OpenFont ("04B_09__.ttf", 20);
 
+                winText.loadFromRenderedText (renderer, Score.scoreFont, "Press any key to continue", Score.textColor);
                 Menu.loadLevelNum (renderer);
 
                 // load menu button
@@ -481,6 +482,7 @@ int main(int argc, char* args[])
                             Score.bStep.render (renderer, SCREEN_WIDTH/2 - Score.bStep.getWidth()/2, SCREEN_HEIGHT/2 + 100);
                             Score.bTime.render (renderer, SCREEN_WIDTH/2 - Score.bTime.getWidth()/2, SCREEN_HEIGHT/2 + 150);
 
+                            winText.render (renderer, SCREEN_WIDTH/2 - winText.getWidth()/2, SCREEN_HEIGHT/2 + 200);
                             SDL_RenderPresent (renderer);
                             while (SDL_PollEvent (&e) != 0)
                             {

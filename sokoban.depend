@@ -202,3 +202,144 @@
 	<fstream>
 	"LTexture.h"
 
+1653144449 source:d:\code\ltnc-project\box.cpp
+	"box.h"
+
+1653144449 d:\code\ltnc-project\box.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"LTexture.h"
+	"Map.h"
+	<algorithm>
+
+1653144448 d:\code\ltnc-project\ltexture.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1653144449 d:\code\ltnc-project\map.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
+
+1653144449 source:d:\code\ltnc-project\button.cpp
+	"button.h"
+
+1653144449 d:\code\ltnc-project\button.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
+	"Map.h"
+	"Person.h"
+	"box.h"
+	"menu.h"
+
+1653144449 d:\code\ltnc-project\person.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<vector>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"LTexture.h"
+	"box.h"
+	"score.h"
+
+1653144449 d:\code\ltnc-project\score.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
+
+1653144449 d:\code\ltnc-project\menu.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
+	"smallMap.h"
+
+1653144449 d:\code\ltnc-project\smallmap.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
+
+1653144448 source:d:\code\ltnc-project\ltexture.cpp
+	"LTexture.h"
+
+1653144448 source:d:\code\ltnc-project\map.cpp
+	"Map.h"
+
+1653144449 source:d:\code\ltnc-project\menu.cpp
+	"menu.h"
+
+1653144449 source:d:\code\ltnc-project\music.cpp
+	"music.h"
+
+1653144449 d:\code\ltnc-project\music.h
+	<SDL_mixer.h>
+	<iostream>
+	"LTexture.h"
+
+1653144449 source:d:\code\ltnc-project\person.cpp
+	"Person.h"
+
+1653144449 source:d:\code\ltnc-project\score.cpp
+	"score.h"
+
+1653144449 source:d:\code\ltnc-project\smallmap.cpp
+	"smallMap.h"
+
+1653144449 source:d:\code\ltnc-project\wall.cpp
+	"wall.h"
+
+1653144449 d:\code\ltnc-project\wall.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<string>
+	<stdio.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<fstream>
+	"LTexture.h"
+	"Map.h"
+
