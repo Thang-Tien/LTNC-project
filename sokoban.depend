@@ -343,3 +343,15 @@
 	"LTexture.h"
 	"Map.h"
 
+1653146675 source:d:\code\ltnc-project\main.cpp
+	"LTexture.h"
+	"Person.h"
+	"Map.h"
+	"box.h"
+	"wall.h"
+	"button.h"
+	"score.h"
+	"menu.h"
+	"music.h"
+	"smallMap.h"
+
