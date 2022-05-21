@@ -1,6 +1,3 @@
-# advPro-BTL
-download sdl2 at https://drive.google.com/file/d/1Tjr3kjx1Kg_Rhv9r17USL9A7LHgD52PM/view?usp=sharing
-## Giới thiệu:
- Đây là gane Sokoban
- ## Tính năng:
- vip pro
+# SOKOBAN
+Cao Tiến Thắng
+![about](https://user-images.githubusercontent.com/100329563/169660008-5543dd6d-d144-4e6a-bea0-753ef03d630b.gif)
