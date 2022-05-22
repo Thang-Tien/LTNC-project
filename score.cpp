@@ -25,33 +25,27 @@ void score::loadTTFScore(SDL_Renderer* renderer)
     {
         cout << " Failed to load score scoreFont, Error: " << TTF_GetError() << '\n';
     }
-    if( !cStep.loadFromRenderedText(renderer, scoreFont, "Steps: " + to_string(currentSteps) + " ", textColor ) )
-    {
-        cout << "Failed to load step texture, Error: " << TTF_GetError() << '\n';
-    }
-    if( !bStep.loadFromRenderedText(renderer, scoreFont, "Best steps: " + to_string(bestSteps) + " ", textColor ) )
-    {
-        cout << "Failed to load best step texture, Error: " << TTF_GetError() << '\n';
-    }
+    cStep.loadFromRenderedText(renderer, scoreFont, "Steps: " + to_string(currentSteps) + " ", textColor);
+    if (bestSteps > 0)
+    bStep.loadFromRenderedText(renderer, scoreFont, "Best steps: " + to_string(bestSteps) + " ", textColor);
+    else bStep.loadFromRenderedText(renderer, scoreFont, "Best steps: -- ", textColor);
 
     // format current time clock
     string currentTimeClockMin = (currentTime/60 > 9) ? (to_string (currentTime/60)) : ("0" + to_string (currentTime/60)),
            currentTimeClockSec = (currentTime - int(currentTime/60)*60 > 9) ?
            to_string (currentTime - int(currentTime/60)*60) : ("0" + to_string (currentTime - int(currentTime/60)*60));
-    if( !cTime.loadFromRenderedText(renderer, scoreFont, "Time: " +
-    currentTimeClockMin + ":" + currentTimeClockSec + " ", textColor ) )
-    {
-        cout << "Failed to load current time texture, Error: " << TTF_GetError() << '\n';
-    }
+    cTime.loadFromRenderedText(renderer, scoreFont, "Time: " + currentTimeClockMin + ":" + currentTimeClockSec + " ", textColor);
 
     // format best time clock
-    string bestTimeClockMin = (bestTime/60 > 9) ? (to_string (bestTime/60)) : ("0" + to_string (bestTime/60)),
-           bestTimeClockSec = (bestTime - int(bestTime/60)*60 > 9) ?
-           to_string (bestTime - int(bestTime/60)*60) : ("0" + to_string (bestTime - int(bestTime/60)*60));
-    if( !bTime.loadFromRenderedText(renderer, scoreFont, "Best time: " + bestTimeClockMin + ":" + bestTimeClockSec + " ", textColor ) )
+    string bestTimeClockMin = "--", bestTimeClockSec = "--";
+    if (bestTime > 0)
     {
-        cout << "Failed to load best time texture, Error: " << TTF_GetError() << '\n';
+        bestTimeClockMin = (bestTime/60 > 9) ? (to_string (bestTime/60)) : ("0" + to_string (bestTime/60));
+        bestTimeClockSec = (bestTime - int(bestTime/60)*60 > 9) ?
+        to_string (bestTime - int(bestTime/60)*60) : ("0" + to_string (bestTime - int(bestTime/60)*60));
     }
+    bTime.loadFromRenderedText(renderer, scoreFont, "Best time: " + bestTimeClockMin + ":" + bestTimeClockSec + " ", textColor);
+
 }
 
 void score::renderScore(SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_HEIGHT)

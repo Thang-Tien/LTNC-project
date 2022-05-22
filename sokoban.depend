@@ -302,7 +302,7 @@
 	<fstream>
 	"LTexture.h"
 
-1653144448 source:d:\code\ltnc-project\ltexture.cpp
+1653217610 source:d:\code\ltnc-project\ltexture.cpp
 	"LTexture.h"
 
 1653144448 source:d:\code\ltnc-project\map.cpp
@@ -322,7 +322,7 @@
 1653144449 source:d:\code\ltnc-project\person.cpp
 	"Person.h"
 
-1653144449 source:d:\code\ltnc-project\score.cpp
+1653217923 source:d:\code\ltnc-project\score.cpp
 	"score.h"
 
 1653156326 source:d:\code\ltnc-project\smallmap.cpp

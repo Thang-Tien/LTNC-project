@@ -62,7 +62,7 @@ bool LTexture::loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font, str
     SDL_Surface* loadedSurface = TTF_RenderText_Solid (font, textureText.c_str(), textColor);
     if (loadedSurface == NULL)
     {
-        cout << "Unable to load text from " << ", Errror: " << SDL_GetError() << '\n';
+        cout << "Unable to load text" << ", Errror: " << TTF_GetError() << '\n';
     }
     else
     {
@@ -70,7 +70,7 @@ bool LTexture::loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font, str
         newTexture = SDL_CreateTextureFromSurface (renderer, loadedSurface);
         if (newTexture == NULL)
         {
-            cout << "Unable to create texture from " << ", Error: " << SDL_GetError() << '\n';
+            cout << "Unable to create texture" << ", Error: " << TTF_GetError() << '\n';
         }
         else
         {
