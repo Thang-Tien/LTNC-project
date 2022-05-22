@@ -23,11 +23,11 @@ Tường sẽ giới hạn phạm vi di chuyển của nhân vật, đồng th�
 ![B3](https://user-images.githubusercontent.com/100329563/169662703-5ab71ced-77f9-4a88-82d5-2ae2966f3cf3.png)
 ## Các chức năng đã cài đặt:
 - Main menu gồm có các nút:
-  - Play: Bắt đầu chơi từ level 1
-  - Levels: Chọn các level mình muốn chơi (từ 1 - 105), di chuột vào level nào sẽ được xem trước level đó, những level nào đã hoàn thành sẽ được tô màu xanh lá. Nút delete sẽ xóa hết các điểm số trước đó
-  - Tutorial: Hướng dẫn chơi game
-  - Credit: Tác giả của game
-  - Quit: Thoát game
+  - ![CasualButtons_Locked_001](https://user-images.githubusercontent.com/100329563/169691374-8630b4df-7c55-43cb-839b-78c9ed734c1b.png) : Bắt đầu chơi từ level 1
+  - ![levels_mouse_out](https://user-images.githubusercontent.com/100329563/169691393-cbe4582f-58dc-4d6f-8931-2663c23a8086.png) : Chọn các level mình muốn chơi (từ 1 - 105), di chuột vào level nào sẽ được xem trước level đó, những level nào đã hoàn thành sẽ được tô màu xanh lá. Nút delete sẽ xóa hết các điểm số trước đó
+  - ![CasualButtons_Locked_008](https://user-images.githubusercontent.com/100329563/169691437-f5265e10-8329-4b3f-bb56-a16389cc70ea.png) : Hướng dẫn chơi game
+  - ![credits_mouse_out](https://user-images.githubusercontent.com/100329563/169691475-da4229a0-bfdf-4db0-80fa-8c1f1ab87119.png) : Tác giả của game
+  - ![CasualButtons_Locked_009](https://user-images.githubusercontent.com/100329563/169691496-df729442-9d96-4533-89ec-129bd8a8af22.png) : Thoát game
 - In Game:
   - Bấm phím mũi tên để di chuyển, mỗi lần bấm sẽ di chuyển được 1 ô, không được đi qua tường, khi đi qua hộp sẽ đẩy hộp theo, được đi vào goal.
   - Nút ![CasualIcons_Locked_020](https://user-images.githubusercontent.com/100329563/169683765-b80d916d-f004-49c3-ac8e-b7dfa9a0258d.png) dùng để bật/tắt âm thanh
