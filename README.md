@@ -43,6 +43,7 @@ Tường sẽ giới hạn phạm vi di chuyển của nhân vật, đồng th�
 - [video demo](https://www.youtube.com/watch?v=p_IewL05KVQ)
 ## Các kỹ thuật lập trình được sử dụng:
 - Thư viện đồ họa SDL2
+- Kiến thức về lập trình hướng đối tượng (OOP)
 - Thư viện mixer để xử lí âm thanh
 - Thư viện fstream để đọc, ghi lại điểm ra file txt
 - Mảng, vector để lưu trữ lại vị trí của nhân vật, hộp. Mảng 2 chiều để lưu trữ map ...
