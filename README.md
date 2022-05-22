@@ -47,37 +47,83 @@ Tường sẽ giới hạn phạm vi di chuyển của nhân vật, đồng th�
 - Thư viện fstream để đọc, ghi lại điểm ra file txt
 - Mảng, vector để lưu trữ lại vị trí của nhân vật, hộp. Mảng 2 chiều để lưu trữ map ...
 - Lớp LTexture để định nghĩa các vật thể trong game (nhân vật, hộp, tường, sàn, ...)
-
-        class LTexture
-        {
-        public:
-            LTexture ();
-            ~LTexture ();
-            bool loadFromFile (SDL_Renderer* renderer, string path);
-            bool loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font, string textureText, SDL_Color textColor);
-            void free();
-            void setColor (Uint8 red, Uint8 green, Uint8 blue);
-            void setBlendMode (SDL_BlendMode blending);
-            void setAlpha (Uint8 alpha);
-            void render(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip = NULL, double angle = 0.0,
-                        SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
-            bool checkCollision(SDL_Rect a, SDL_Rect b);
-            void setPosX (int x);
-            void setPosY (int y);
-            int getWidth();
-            int getHeight ();
-            int getPosX ();
-            int getPosY ();
-            SDL_Rect getRect();
-        private:
-            SDL_Texture* texture;
-            int mWidth;
-            int mHeight;
-        protected:
-            int posX,posY;
-        };  
+```C++
+class LTexture
+{
+public:
+    LTexture ();
+    ~LTexture ();
+    bool loadFromFile (SDL_Renderer* renderer, string path);
+    bool loadFromRenderedText (SDL_Renderer* renderer, TTF_Font* font, string textureText, SDL_Color textColor);
+    void free();
+    void setColor (Uint8 red, Uint8 green, Uint8 blue);
+    void setBlendMode (SDL_BlendMode blending);
+    void setAlpha (Uint8 alpha);
+    void render(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip = NULL, double angle = 0.0,
+                SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
+    bool checkCollision(SDL_Rect a, SDL_Rect b);
+    void setPosX (int x);
+    void setPosY (int y);
+    int getWidth();
+    int getHeight ();
+    int getPosX ();
+    int getPosY ();
+    SDL_Rect getRect();
+private:
+    SDL_Texture* texture;
+    int mWidth;
+    int mHeight;
+protected:
+    int posX,posY;
+};  
+```
 - Kỹ thuật tách file, module hóa chương trình
 - Xử lí va chạm
+```C++
+bool LTexture::checkCollision(SDL_Rect a, SDL_Rect b)
+{
+    //The sides of the rectangles
+    int leftA, leftB;
+    int rightA, rightB;
+    int topA, topB;
+    int bottomA, bottomB;
+
+    //Calculate the sides of rect A
+    leftA = a.x;
+    rightA = a.x + a.w;
+    topA = a.y;
+    bottomA = a.y + a.h;
+
+    //Calculate the sides of rect B
+    leftB = b.x;
+    rightB = b.x + b.w;
+    topB = b.y;
+    bottomB = b.y + b.h;
+
+    //If any of the sides from A are outside of B
+    if( bottomA <= topB )
+    {
+        return false;
+    }
+
+    if( topA >= bottomB )
+    {
+        return false;
+    }
+
+    if( rightA <= leftB )
+    {
+        return false;
+    }
+
+    if( leftA >= rightB )
+    {
+        return false;
+    }
+    //If none of the sides from A are outside B
+    return true;
+}
+```
 - Xử lí các sự kiện từ bàn phím và chuột
 - Một số kỹ năng tính toán toán học để xác định vị trí đặt nút bấm
 ## Kết luận:
