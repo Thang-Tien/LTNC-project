@@ -40,7 +40,7 @@ Tường sẽ giới hạn phạm vi di chuyển của nhân vật, đồng th�
 - Nhạc:
   - Nhạc nền sẽ chạy trong suốt game, có thể bật/tắt tùy ý
   - Khi hoàn thành 1 level sẽ có 1 tiếng ting được phát lên
-- video demo
+- [video demo](https://www.youtube.com/watch?v=p_IewL05KVQ)
 ## Các kỹ thuật lập trình được sử dụng:
 - Thư viện đồ họa SDL2
 - Thư viện mixer để xử lí âm thanh
