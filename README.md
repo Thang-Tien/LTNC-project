@@ -50,7 +50,8 @@ Tường sẽ giới hạn phạm vi di chuyển của nhân vật, đồng th�
   - Mỗi level sẽ được ghi lại điểm số, đó là số bước di chuyển và thời gian, số bước ít nhất và thời gian ngắn nhất để hoàn thành level sẽ được ghi vào kỷ lục.
 - Nhạc:
   - Nhạc nền sẽ chạy trong suốt game, có thể bật/tắt tùy ý.
-  - Khi hoàn thành 1 level sẽ có 1 tiếng ting được phát lên.
+  - Khi hoàn thành 1 level sẽ có màn hình thông báo sẽ có 1 tiếng ting được phát lên.
+  ![win_image](https://user-images.githubusercontent.com/100329563/170060219-8b78abe8-30a8-4acd-b097-45973752ffd4.png)
 - [video demo](https://www.youtube.com/watch?v=p_IewL05KVQ)
 ## Các kỹ thuật lập trình được sử dụng:
 - Thư viện đồ họa SDL2.
