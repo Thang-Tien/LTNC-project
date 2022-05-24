@@ -133,6 +133,7 @@ bool LTexture::checkCollision(SDL_Rect a, SDL_Rect b)
    - Nâng cao kỹ năng tách file, module hóa, clean code để quản lí code lớn, dễ dàng refactor, hướng tới làm lập trình viên chuyên nghiệp 
    - Nâng cao khả năng tự học, tự tìm tòi kiến thức, tự tìm cách fix bug
 - Hướng phát triển thêm cho dự án:
+  - Thêm tính năng tự động thay đổi kích cỡ map (khi map qua lớn và window không thể chứa hết thì lúc đó sẽ tự động giảm kích cỡ map cho vừa với window)
   - Cải thiện về chất lượng đồ họa
   - Tiếp tục thiết kế thêm nhiều map hơn
   - Thêm tính năng như: thay đổi nhân vật, chọn bài hát, thêm nhiều sound efect
