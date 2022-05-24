@@ -30,11 +30,13 @@ void box::renderBox (SDL_Renderer* renderer)
         }
     }
 }
+
 void box::loadBoxTexture (SDL_Renderer* renderer)
 {
     boxTexture.loadFromFile (renderer, "images/box.png");
     boxWinTexture.loadFromFile (renderer, "images/box_win.png");
 }
+
 void box::loadBoxData (const Map& gameMap)
 {
     boxCount = gameMap.boxCount;
@@ -60,6 +62,7 @@ bool box::winCheck ()
     }
     return true;
 }
+// sort horizontal boxes
 void box::sortBoxByX()
 {
     for (int i = 0; i < boxCount; i++)
@@ -74,6 +77,7 @@ void box::sortBoxByX()
     }
 }
 
+// sort vertical boxes
 void box::sortBoxByY()
 {
     for (int i = 0; i < boxCount; i++)
@@ -97,6 +101,7 @@ void box::saveLastBoxesPos ()
     }
     totalLastBox ++;
 }
+
 void box::backLastPos (int& last)
 {
     if (totalLastBox - last < 0) {last = totalLastBox;}

@@ -159,6 +159,7 @@ void Person::moveAndCheckCollision (SDL_Renderer* renderer, SDL_Rect& personRect
             }
         }
     }
+
     // person vs wall collision check
     for (int i = 0; i < wallCount; i++)
     {

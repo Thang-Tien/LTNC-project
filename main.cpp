@@ -460,7 +460,6 @@ int main(int argc, char* args[])
                     // handle win state
                     if (Box.winCheck() == true)
                     {
-
                         // play sound effect
                         Mix_PlayChannel (1, Music.dingSoundEffect, 0);
 

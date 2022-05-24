@@ -25,9 +25,13 @@ void score::loadTTFScore(SDL_Renderer* renderer)
     {
         cout << " Failed to load score scoreFont, Error: " << TTF_GetError() << '\n';
     }
+
+    // load step from file
     cStep.loadFromRenderedText(renderer, scoreFont, "Steps: " + to_string(currentSteps) + " ", textColor);
+
     if (bestSteps > 0)
     bStep.loadFromRenderedText(renderer, scoreFont, "Best steps: " + to_string(bestSteps) + " ", textColor);
+
     else bStep.loadFromRenderedText(renderer, scoreFont, "Best steps: -- ", textColor);
 
     // format current time clock

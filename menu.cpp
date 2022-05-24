@@ -39,6 +39,7 @@ void menu::loadMenuButton (SDL_Renderer* renderer, int SCREEN_WIDTH, int SCREEN_
         menuButtonPosY += menuButtonTexture[i].getHeight() + 10;
     }
 
+    // set button rect position
     warningTextureRect = {SCREEN_WIDTH/2 - warningTexture.getWidth()/2, SCREEN_HEIGHT/2 - warningTexture.getHeight()/2, warningTexture.getWidth(), warningTexture.getHeight()};
     backButtonRect = {0, 0, backButton.getWidth(), backButton.getHeight()};
     deleteButtonRect = {SCREEN_WIDTH - deleteButton.getWidth(), 0, deleteButton.getWidth(), deleteButton.getHeight()};
