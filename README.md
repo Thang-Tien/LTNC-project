@@ -3,6 +3,17 @@ Cao Tiến Thắng - 21020403 - K66CD - UET
 ## Giới thiệu
 Môn học: Lập trình nâng cao - INT 2215_1
 
+### Table of contents:
+**[Mô tả chung về trò chơi](#mô-tả-chung-về-trò-chơi)**
+
+**[Cách cài đặt game](#cách-cài-đặt-game)**
+
+**[Các chức năng đã cài đặt](#các-chức-năng-đã-cài-đặt)**
+
+**[Các kỹ thuật lập trình được sử dụng](#các-kỹ-thuật-lập-trình-được-sử-dụng)**
+
+**[Kết luận](#kết-luận)**
+
 Bài tập lớn - Game (Sokoban)
 ## Mô tả chung về trò chơi
 Đây là phiên bản làm lại của game giải đố sokoban cổ điển, đồng thời thêm thắt một vài tính năng nhỏ cho gameplay thêm phong phú.
